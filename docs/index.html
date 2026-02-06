@@ -11,6 +11,10 @@
     <div class="container">
       <h1>Group Project Hub</h1>
       <p class="subtitle">A central place for our meetings, deadlines, resources, and progress.</p>
+      <div class="header-badges">
+        <span class="badge">Updated: 2026-02-06</span>
+        <span class="badge badge-accent">Next deadline: 2026-02-13</span>
+      </div>
     </div>
   </header>
 
@@ -18,17 +22,112 @@
     <section id="coming-meetings" class="card">
       <h2>Coming Meetings</h2>
       <ul>
-        <li><strong>YYYY-MM-DD, HH:MM</strong> — Location/Zoom • Agenda: Placeholder agenda</li>
-        <li><strong>YYYY-MM-DD, HH:MM</strong> — Location/Zoom • Agenda: Placeholder agenda</li>
+        <li><strong>2026-02-07, 16:00</strong> — Room/Zoom • Agenda: Topic shortlist</li>
+        <li><strong>2026-02-12, 18:00</strong> — Room/Zoom • Agenda: Final topic decision</li>
       </ul>
     </section>
 
     <section id="deadlines" class="card">
       <h2>Deadlines</h2>
       <ul>
-        <li><strong>Task Name</strong> — Due: YYYY-MM-DD</li>
-        <li><strong>Task Name</strong> — Due: YYYY-MM-DD</li>
+        <li><strong>Topic selection</strong> — Due: 2026-02-13</li>
+        <li><strong>Project plan</strong> — Due: TBD</li>
       </ul>
+    </section>
+
+    <section id="timeline" class="card">
+      <h2>Timeline</h2>
+      <ol class="timeline">
+        <li>
+          <div class="timeline-date">2026-02-06</div>
+          <div class="timeline-content">
+            <h3>Kickoff + requirements gathering</h3>
+            <p>Align on goals, roles, and deliverables.</p>
+          </div>
+        </li>
+        <li class="highlight">
+          <div class="timeline-date">2026-02-13</div>
+          <div class="timeline-content">
+            <h3>Topic selection deadline</h3>
+            <p>Finalize and submit the topic selection.</p>
+          </div>
+        </li>
+        <li>
+          <div class="timeline-date">TBD</div>
+          <div class="timeline-content">
+            <h3>Proposal draft</h3>
+            <p>Outline scope, milestones, and success criteria.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="calendar" class="card">
+      <h2>Calendar (Feb 2026)</h2>
+      <div class="calendar">
+        <div class="calendar-header">Mon</div>
+        <div class="calendar-header">Tue</div>
+        <div class="calendar-header">Wed</div>
+        <div class="calendar-header">Thu</div>
+        <div class="calendar-header">Fri</div>
+        <div class="calendar-header">Sat</div>
+        <div class="calendar-header">Sun</div>
+
+        <div class="calendar-cell muted">&nbsp;</div>
+        <div class="calendar-cell muted">&nbsp;</div>
+        <div class="calendar-cell muted">&nbsp;</div>
+        <div class="calendar-cell muted">&nbsp;</div>
+        <div class="calendar-cell muted">&nbsp;</div>
+        <div class="calendar-cell">1</div>
+        <div class="calendar-cell">2</div>
+        <div class="calendar-cell">3</div>
+        <div class="calendar-cell">4</div>
+        <div class="calendar-cell">5</div>
+        <div class="calendar-cell">6</div>
+        <div class="calendar-cell">7</div>
+        <div class="calendar-cell">8</div>
+        <div class="calendar-cell">9</div>
+        <div class="calendar-cell">10</div>
+        <div class="calendar-cell">11</div>
+        <div class="calendar-cell">12</div>
+        <div class="calendar-cell highlight">13<span class="dot"></span></div>
+        <div class="calendar-cell">14</div>
+        <div class="calendar-cell">15</div>
+        <div class="calendar-cell">16</div>
+        <div class="calendar-cell">17</div>
+        <div class="calendar-cell">18</div>
+        <div class="calendar-cell">19</div>
+        <div class="calendar-cell">20</div>
+        <div class="calendar-cell">21</div>
+        <div class="calendar-cell">22</div>
+        <div class="calendar-cell">23</div>
+        <div class="calendar-cell">24</div>
+        <div class="calendar-cell">25</div>
+        <div class="calendar-cell">26</div>
+        <div class="calendar-cell">27</div>
+        <div class="calendar-cell">28</div>
+      </div>
+      <p class="note">Highlighted date marks the topic selection deadline.</p>
+    </section>
+
+    <section id="kanban" class="card">
+      <h2>Kanban Board</h2>
+      <div class="kanban">
+        <div class="kanban-column">
+          <h3>Backlog</h3>
+          <div class="kanban-card">Brainstorm topics</div>
+          <div class="kanban-card">Collect requirements</div>
+        </div>
+        <div class="kanban-column">
+          <h3>In Progress</h3>
+          <div class="kanban-card">Narrow topic list</div>
+          <div class="kanban-card">Draft timeline</div>
+        </div>
+        <div class="kanban-column">
+          <h3>Done</h3>
+          <div class="kanban-card">Set up GitHub Pages</div>
+        </div>
+      </div>
     </section>
 
     <section id="resources-docs" class="card">
@@ -46,6 +145,13 @@
         <li>🟡 Design in progress</li>
         <li>⬜ Implementation not started</li>
       </ul>
+      <div class="progress-row">
+        <span>Overall progress</span>
+        <div class="progress">
+          <div class="progress-fill" style="width: 35%;"></div>
+        </div>
+        <span class="progress-label">35%</span>
+      </div>
     </section>
 
     <section id="parts-assigned-to" class="card">
