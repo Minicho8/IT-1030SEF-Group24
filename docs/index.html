@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div class="bg-orb orb-one" aria-hidden="true"></div>
+  <div class="bg-orb orb-two" aria-hidden="true"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
   <header class="site-header">
     <div class="container">
       <h1>Group Project Hub</h1>
@@ -15,18 +18,23 @@
         <span class="badge">Updated: 2026-02-06</span>
         <span class="badge badge-accent">Next deadline: 2026-02-13</span>
       </div>
+      <div class="hero-actions">
+        <a class="btn" href="#timeline">View timeline</a>
+        <a class="btn btn-outline" href="#kanban">Jump to kanban</a>
+        <a class="btn btn-ghost" href="#resources-docs">Open resources</a>
+      </div>
     </div>
   </header>
 
   <main class="container">
-    <section id="coming-meetings" class="card">
+    <section id="coming-meetings" class="card reveal">
       <h2>Coming Meetings</h2>
       <ul>
         <li><strong>2026-02-11, 12:00-14:30</strong> — F2F • Agenda: Topic selection</li>
       </ul>
     </section>
 
-    <section id="deadlines" class="card">
+    <section id="deadlines" class="card reveal">
       <h2>Deadlines</h2>
       <ul>
         <li><strong>Topic selection</strong> — Due: 2026-02-13</li>
@@ -34,7 +42,7 @@
       </ul>
     </section>
 
-    <section id="timeline" class="card">
+    <section id="timeline" class="card reveal">
       <h2>Timeline</h2>
       <ol class="timeline">
         <li>
@@ -75,7 +83,7 @@
       </ol>
     </section>
 
-    <section id="kanban" class="card">
+    <section id="kanban" class="card reveal">
       <h2>Kanban Board</h2>
       <div class="kanban">
         <div class="kanban-column">
@@ -95,15 +103,25 @@
       </div>
     </section>
 
-    <section id="resources-docs" class="card">
+    <section id="resources-docs" class="card reveal">
       <h2>Resources & Docs</h2>
-      <ul>
-        <li><a href="#" target="_blank">Resource Link 1</a> — short description</li>
-        <li><a href="#" target="_blank">Resource Link 2</a> — short description</li>
-      </ul>
+      <div class="details-list">
+        <details>
+          <summary>Project brief</summary>
+          <p>Add the shared brief link and a one-line scope summary.</p>
+        </details>
+        <details>
+          <summary>Research notes</summary>
+          <p>Drop in the folder for sources, citations, and screenshots.</p>
+        </details>
+        <details>
+          <summary>Design assets</summary>
+          <p>Include slide templates, diagrams, and brand references.</p>
+        </details>
+      </div>
     </section>
 
-    <section id="process-tracking" class="card">
+    <section id="process-tracking" class="card reveal">
       <h2>Process Tracking</h2>
       <ul>
         <li>✅ Research complete</li>
@@ -119,7 +137,25 @@
       </div>
     </section>
 
-    <section id="parts-assigned-to" class="card">
+    <section id="pulse" class="card reveal">
+      <h2>Team Pulse</h2>
+      <div class="pulse-grid">
+        <div class="pulse-card">
+          <span class="pulse-label">Focus this week</span>
+          <strong>Topic selection</strong>
+        </div>
+        <div class="pulse-card">
+          <span class="pulse-label">Open decisions</span>
+          <strong>3</strong>
+        </div>
+        <div class="pulse-card">
+          <span class="pulse-label">Momentum</span>
+          <strong>On track</strong>
+        </div>
+      </div>
+    </section>
+
+    <section id="parts-assigned-to" class="card reveal">
       <h2>Parts Assigned To</h2>
       <ul>
         <li><strong>Member Name</strong> → Task A, Task B</li>
@@ -127,7 +163,7 @@
       </ul>
     </section>
 
-    <section id="checklist" class="card">
+    <section id="checklist" class="card reveal">
       <h2>Checklist</h2>
       <ul class="checklist">
         <li><input type="checkbox" /> Set up repo structure</li>
