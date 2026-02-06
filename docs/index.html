@@ -1,43 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <title>Group Project Site</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Group Project Hub</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <header>
-        <h1>Group Project Site</h1>
-    </header>
-    <main>
-        <section id="coming-meetings">
-            <h2>Coming Meetings</h2>
-            <p>Details about upcoming meetings will go here.</p>
-        </section>
-        <section id="deadlines">
-            <h2>Deadlines</h2>
-            <p>Information about important deadlines will be listed here.</p>
-        </section>
-        <section id="resources-docs">
-            <h2>Resources and Docs</h2>
-            <p>Links to important resources and documentation will appear here.</p>
-        </section>
-        <section id="process-tracking">
-            <h2>Process Tracking</h2>
-            <p>Overview of the project's progress will be shown here.</p>
-        </section>
-        <section id="parts-assigned-to">
-            <h2>Parts Assigned To</h2>
-            <p>A breakdown of tasks assigned to group members will be included here.</p>
-        </section>
-        <section id="checklist">
-            <h2>Checklist</h2>
-            <p>A checklist for completing tasks will be found here.</p>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2026 Group 24</p>
-    </footer>
+  <header class="site-header">
+    <div class="container">
+      <h1>Group Project Hub</h1>
+      <p class="subtitle">A central place for our meetings, deadlines, resources, and progress.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="coming-meetings" class="card">
+      <h2>Coming Meetings</h2>
+      <ul>
+        <li><strong>YYYY-MM-DD, HH:MM</strong> — Location/Zoom • Agenda: Placeholder agenda</li>
+        <li><strong>YYYY-MM-DD, HH:MM</strong> — Location/Zoom • Agenda: Placeholder agenda</li>
+      </ul>
+    </section>
+
+    <section id="deadlines" class="card">
+      <h2>Deadlines</h2>
+      <ul>
+        <li><strong>Task Name</strong> — Due: YYYY-MM-DD</li>
+        <li><strong>Task Name</strong> — Due: YYYY-MM-DD</li>
+      </ul>
+    </section>
+
+    <section id="resources-docs" class="card">
+      <h2>Resources & Docs</h2>
+      <ul>
+        <li><a href="#" target="_blank">Resource Link 1</a> — short description</li>
+        <li><a href="#" target="_blank">Resource Link 2</a> — short description</li>
+      </ul>
+    </section>
+
+    <section id="process-tracking" class="card">
+      <h2>Process Tracking</h2>
+      <ul>
+        <li>✅ Research complete</li>
+        <li>🟡 Design in progress</li>
+        <li>⬜ Implementation not started</li>
+      </ul>
+    </section>
+
+    <section id="parts-assigned-to" class="card">
+      <h2>Parts Assigned To</h2>
+      <ul>
+        <li><strong>Member Name</strong> → Task A, Task B</li>
+        <li><strong>Member Name</strong> → Task C</li>
+      </ul>
+    </section>
+
+    <section id="checklist" class="card">
+      <h2>Checklist</h2>
+      <ul class="checklist">
+        <li><input type="checkbox" /> Set up repo structure</li>
+        <li><input type="checkbox" /> Draft project plan</li>
+        <li><input type="checkbox" /> Finalize requirements</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Group 24</p>
+    </div>
+  </footer>
 </body>
 </html>
