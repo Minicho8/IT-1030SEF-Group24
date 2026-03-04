@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ingredients Panel</title>
+
+    <!-- Connect CSS -->
+    <link rel="stylesheet" href="./ingredients-left-panel.css" />
+    <link rel="stylesheet" href="ingredients-left-panel.stock-adjust" />
+  </head>
+
+  <body>
+    <div class="appFrame">
+      <!-- Header / summary -->
+      <header>
+        <h1>Ingredients</h1>
+        <div class="summary">
+          Total: <span id="countTotal">0</span>
+          · Expiring soon: <span id="countExpiring">0</span>
+        </div>
+      </header>
+
+      <!-- Controls -->
+      <section class="controls">
+        <input id="ingredientSearch" placeholder="Search ingredients" />
+        <select id="filterCategory">
+          <option value="all">All categories</option>
+          <option value="dairy">dairy</option>
+          <option value="veg">veg</option>
+          <option value="meat">meat</option>
+        </select>
+        <select id="filterExpiry">
+          <option value="all">All</option>
+          <option value="expired">Expired</option>
+          <option value="week">≤ 1 week</option>
+          <option value="month">≤ 1 month</option>
+        </select>
+        <select id="sortBy">
+          <option value="expiryAsc">Expiry ↑</option>
+          <option value="expiryDesc">Expiry ↓</option>
+          <option value="nameAsc">Name A→Z</option>
+          <option value="stockLowFirst">Stock low first</option>
+        </select>
+        <label><input type="checkbox" id="toggleLowStock" /> Low stock only</label>
+
+        <button id="btnOpenAddIngredient" type="button">Add ingredient</button>
+      </section>
+
+      <!-- Ingredients list (render target) -->
+      <ul id="ingredientsList" class="ingredientsList" aria-live="polite"></ul>
+
+      <!-- Modal for add/edit ingredient -->
+      <dialog id="ingredientModal">
+        <h2 id="ingredientModalTitle">Add ingredient</h2>
+        <form id="ingredientForm">
+          <div>
+            <label for="ingName">Name</label>
+            <input id="ingName" name="name" required />
+          </div>
+          <div>
+            <label for="ingCategory">Category</label>
+            <input id="ingCategory" name="category" value="dairy" />
+          </div>
+          <div>
+            <label for="ingQty">Quantity</label>
+            <input id="ingQty" name="qty" type="number" step="0.1" value="1" required />
+            <label for="ingUnit">Unit</label>
+            <input id="ingUnit" name="unit" value="pcs" />
+          </div>
+          <div>
+            <label for="ingExpiry">Expiry (YYYY-MM-DD)</label>
+            <input id="ingExpiry" name="expiry" type="date" />
+          </div>
+          <div>
+            <label for="ingMinQty">Low stock threshold</label>
+            <input id="ingMinQty" name="minQty" type="number" value="0" />
+          </div>
+
+          <div class="modalActions">
+            <button type="submit">Save</button>
+            <button id="btnCancelModal" type="button">Cancel</button>
+          </div>
+        </form>
+      </dialog>
+    </div>
+
+    <!-- Connect JS (use "defer" so DOM is ready) -->
+    <script src="./ingredients-left-panel.js" defer></script>
+
+  </body>
+</html>
