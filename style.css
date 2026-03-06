@@ -28,6 +28,14 @@ body {
 	flex-direction: column;
 }
 
+header {
+    background: var(--primary);
+    color: white;
+    text-align: center;
+    font-family: var(--font-sans);
+    font-weight: 600;
+}
+
 .dashboard-page {
 	min-width: 500px;
 	flex: 1;
