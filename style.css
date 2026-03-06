@@ -1,0 +1,84 @@
+/*overall theme control*/
+:root {
+    --bg-gradient: radial-gradient(circle at 20% 30%, #f4faf7, #eaf3ef);
+    --card-white: rgba(255,255,255,0.88);
+    --glass-edge: rgba(255,255,255,0.6);
+    --primary: #1E3A2F;        /* deep forest green */
+    --primary-soft: #2C5F4B;
+    --accent: #2E8B57;         /* sea green – fresh, award-friendly */
+    --accent-soft: #3CB371;    /* medium sea green */
+    --accent-glow: rgba(46,139,86,0.18);
+    --success-mint: #4CAF50;
+    --text-dark: #1C2E2A;
+    --text-light: #547A6B;
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 20px 35px -10px rgba(28, 55, 45, 0.08);
+    --shadow-elevation: 0 40px 60px -15px rgba(30, 60, 50, 0.14);
+    --radius-card: 36px;
+    --radius-element: 22px;
+    --radius-tile: 20px;
+    --radius-button: 50px;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+	min-height: 100vh;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.dashboard-page {
+	min-width: 500px;
+	flex: 1;
+	display: flex;
+}
+
+.dashboard {
+	display: flex;
+	width: 100%;
+	flex: 1;
+}
+.card {
+    background: var(--card-white);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-edge);
+    border-radius: var(--radius-card);
+    padding: 2.5rem 2.2rem;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+    height: stretch
+}
+.survey-card {
+    background: var(--card-white);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-edge);
+    border-radius: var(--radius-card);
+    padding: 2.5rem 2.2rem;
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+  }
+  .survey-card:hover {
+    box-shadow: var(--shadow-elevation);
+  }
+@media screen and (max-width: 520px) {
+    .dashboard{
+	flex-direction: column;
+}
+}
+
+.dashboard-left,
+.dashboard-right {
+	box-sizing: border-box;
+	padding: 16px;
+    background-color: #c1ffdc;
+}
+
+.dashboard-left {
+	flex: 0 0 40%;
+}
+
+.dashboard-right {
+	flex: 0 0 60%;
+}
