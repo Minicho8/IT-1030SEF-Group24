@@ -1,1 +1,150 @@
+<!--write in main code (food wise system)-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mood_Selector</title>
+    <style>
+        #panel {
+            display: none;
+        }
+    </style>
+</head>
+<body>
 
+    <div id="panel"> 
+        <h1>Food Wise Kitchen System</h1>
+        <p>-This system is use to...(unfinish)</p>
+        <div id="AskMood"></div>
+        <form id="Form">
+            <fieldset>
+                <input type="radio" name="mood" value="sad">    <!--change value (fix all)-->
+                <span>Sad</span>
+                <input type="radio" name="mood" value="relax">
+                <span>Stress</span>
+                <input type="radio" name="mood" value="ease_depressed">
+                <span>Depressed</span>
+                <input type="radio" name="mood" value="focus">
+                <span>Unfocused</span>
+                <input type="radio" name="mood" value="relax">
+                <span>Panic</span>
+                <input type="radio" name="mood" value="relax">
+                <span>Nervous</span>
+                <input type="radio" name="mood" value="ease_angry">
+                <span>Angry</span>
+                <input type="radio" name="mood" value="ease_anxious">
+                <span>Anxious</span>
+                <input type="radio" name="mood" value="energy_recover">
+                <span>Exhausted</span>
+                <input type="radio" name="mood" value="">
+                <span>N/A</span>
+                <button type="submit">Save</button>
+                <button type="reset">Clear</button>
+            </fieldset>
+        </form>
+    </div>
+
+    <!--<div id="panel">
+        <script>console.log("test")</script>
+        <h6>I see 🫂, could you tell me how it feel? (change)</h6>
+        <form sad_form>
+            <fieldset>
+                <input type="radio" name="mood" value="relax">
+                <span>Stress</span>
+                <input type="radio" name="mood" value="ease_depressed">
+                <span>Depressed</span>
+                <input type="radio" name="mood" value="focus">
+                <span>Unfocused</span>
+                <input type="radio" name="mood" value="relax">
+                <span>Panic</span>
+                <input type="radio" name="mood" value="relax">
+                <span>Nervous</span>
+                <input type="radio" name="mood" value="ease_angry">
+                <span>Angry</span>
+                <input type="radio" name="mood" value="ease_anxious">
+                <span>Anxious</span>
+                <input type="radio" name="mood" value="energy_recover">
+                <span>Exhausted</span>
+                <input type="radio" name="mood" value="">
+                <span>N/A</span>
+                <button type="submit">Save</button>
+                <button type="reset">Clear</button>
+            </fieldset>
+        </form>
+
+    </div>-->
+
+
+        <script>
+        function Panel_on() {
+            document.getElementById("panel").style.display = "block";
+        }
+
+        function Panel_off() {
+            document.getElementById("panel").style.display = "none";
+        }
+        
+        function randomAskMood(){
+            var ask_mood = ["How are you feeling right now?",
+                            "What\'s your mood today?",
+                            "How\'s your day going so far?"];
+            document.getElementById("AskMood").textContent = ask_mood[Math.floor(Math.random() * ask_mood.length)];
+        }
+        </script>
+
+        <script>
+        var record_date = new Date("January 01, 2025").toLocaleDateString('en-GB');  // save in local stroge     January 01, 2025    March 08, 2026
+        //let record_date = localStorage.getItem("food_wise_date");     localStorage
+        const today = new Date().toLocaleDateString('en-GB');
+
+        if (record_date != today) {
+            Panel_on();
+            // open mood selector (return needed values)
+            //checking
+            //record_date = today;      move
+            //console.log("run2");
+            //close()  ?
+            //Panel_off();
+        } else {
+            document.write("Turn to food wise system")
+        }
+        
+        // open food wise system (continous) (skip mood)
+        //console.log("run3");
+        </script>
+
+        <script>
+
+            const form = document.getElementById("Form");
+
+            form.addEventListener("submit",function(event) {
+                event.preventDefault();
+                //document.getElementById("panel").style.display = "none";      /Panel_off()   /move
+                console.log("run4");
+                
+                const selectedMood = document.querySelector('input[name="mood"]:checked');
+
+                console.log(selectedMood.value)
+                /*
+                if (selectedMood.value === "sad") {
+                    console.log("redo");        //anouther from
+                    document.write("redo")
+                    //Panel_on();
+                    //continous
+                }*/
+
+                record_date = today;
+                //ask sad,return time+tag
+                Panel_off();
+                document.write("Turn to food wise system")
+
+            })
+        </script>
+
+
+        <script>
+            window.onload = randomAskMood;
+        </script>
+
+</body>
+</html>
