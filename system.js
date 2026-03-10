@@ -51,12 +51,13 @@ function expiryTag(ingredient) {
 function addNewIngredient(data) {
   const item = {
     id: uid(),
-    name: data.name.trim().toLowerCase(),
+    name: data.name.trim()[0].toUpperCase() + data.name.trim().slice(1).toLowerCase(),
     category: data.category,
     qty: Number(data.qty),
     unit: data.unit,
     expiry: data.expiry || "",
-    minQty: Number(data.minQty ?? 1),
+    minQty: Number(3),
+    //minQty: Number(data.minQty ?? 1),
   };
   ingredients = [item, ...ingredients];
   saveIngredientsToStorage(ingredients);
@@ -78,7 +79,8 @@ function filterIngredients(list, {category, expiry, search, lowStockOnly}) {
         if (expiry === "all") return true;
         if (expiry) {
             const d = daysleft(i.expiry);
-            if (expiry === "expired" && d <= 0) return false;
+            console.log('Filtering', i.name, 'with expiry', i.expiry, 'which is in', d, 'days');
+            if ((expiry === "expired" && d <= 0) || i.expiry === "") return false;
             if (expiry === "week" && d > 7) return false;
             if (expiry === "month" && d > 30) return false;
             if (expiry === "halfYear" && d > 183) return false;
@@ -90,19 +92,19 @@ function sortIngredients(list,sortBy) {
     const temp = [...list];
     switch (sortBy) {
     case "nameAsc":
-      temp.sort((a, b) => a.name.localeCompare(b.name));
-      break;
+        temp.sort((a, b) => a.name.localeCompare(b.name));
+        break;
     case "expiryDesc":
-      temp.sort((a, b) => (daysleft(b.expiry)) - (daysleft(a.expiry)));
-      break;
+        temp.sort((a, b) => (daysleft(b.expiry)) - (daysleft(a.expiry)));
+        break;
     case "stockLowFirst":
-      temp.sort((a, b) => a.qty - b.qty);
-      break;
+        temp.sort((a, b) => a.qty - b.qty);
+        break;
     case "expiryAsc":
     default:
-      temp.sort((a, b) => (daysleft(a.expiry)) - (daysleft(b.expiry)));
-      break;
-  }
+        temp.sort((a, b) => (daysleft(a.expiry)) - (daysleft(b.expiry)));
+        break;
+    }
 
   return temp;
 
@@ -117,6 +119,7 @@ function updateIngredientsView() {
 
     return sortIngredients(filtered, document.getElementById('sortBy').value);
 }
+
 function buildView(view) {
     switch (view) {
         case 'left':
@@ -147,7 +150,7 @@ function buildView(view) {
                         <div class="stock-controls">
                             <label class="stock-label">Adjust</label>
                             <button class="stock-btn" data-action="useAmount" type="button">Use</button>
-                            <button class="stock-btn" data-action="addAmount" type="button">Add</button>
+                            <!-- <button class="stock-btn" data-action="addAmount" type="button">Add</button> -->
                             
                             <input class="stock-input" id="adj-${item.id}" data-role="adjustAmount" type="number" min="0" step="1" value="1" inputmode="decimal">
                             <span class="stock-unit">${item.unit}</span>
@@ -166,7 +169,7 @@ function buildView(view) {
 function openAddModal() {
     document.getElementById("ingredientForm").reset();
     document.getElementById("ingQty").value = "1";
-    document.getElementById("ingMinQty").value = "0";
+    //document.getElementById("ingMinQty").value = "0";
     document.getElementById("ingredientModal").showModal();
 }
 
@@ -207,15 +210,32 @@ document.getElementById('search-btn').addEventListener('click', function() {
 document.getElementById('filter-btn').addEventListener('click', function() {
     document.getElementsByClassName('filter')[0].classList.toggle('show');
 });
-document.addEventListener('click', function(event) {
-
+document.getElementById('ingredientsList').addEventListener('click', function(event) {
+    const action = event.target.getAttribute('data-action');
+    console.log('Clicked element action:', action);
+    switch (action) {
+        case "delete":
+            const id = event.target.closest("li[data-id]").getAttribute("data-id");
+            deleteExistingIngredient(id);
+            console.log('Deleted ingredient with id:', id);
+            break;
+        case "useAmount":
+            const useId = event.target.closest("li[data-id]").getAttribute("data-id");
+    }
+    
 });
+document.getElementById('filterCategory').addEventListener('change', buildView.bind(null, 'left'));
+document.getElementById('filterExpiry').addEventListener('change', buildView.bind(null, 'left'));
+document.getElementById('ingredientSearch').addEventListener('input', buildView.bind(null, 'left'));
+document.getElementById('lowStockOnly').addEventListener('change', buildView.bind(null, 'left'));
+document.getElementById('sortBy').addEventListener('change', buildView.bind(null, 'left'));
+
 
 //Add new ingredient modal
 document.getElementById('add-btn').addEventListener("click", openAddModal);
 document.getElementById('btnCancelModal').addEventListener("click", closeModal);
 
-document.getElementById("ingredientForm").addEventListener("submit", (s) => {
+document.getElementById("ingredientForm").addEventListener("submit", function(s) {
   s.preventDefault();
 
   addNewIngredient({
@@ -224,7 +244,7 @@ document.getElementById("ingredientForm").addEventListener("submit", (s) => {
     qty: document.getElementById("ingQty").value,
     unit: document.getElementById("ingUnit").value,
     expiry: document.getElementById("ingExpiry").value,
-    minQty: document.getElementById("ingMinQty").value,
+    //minQty: document.getElementById("ingMinQty").value,
   });
 
   closeModal();
