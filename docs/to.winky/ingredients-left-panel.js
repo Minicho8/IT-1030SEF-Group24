@@ -110,8 +110,8 @@ function deleteExistingIngredient(id) {
 }
 
 // filter
-function filterIngredients(list, { category, expiryWindow, searchText, lowStockOnly }) {
-  const q = (searchText || "").trim().toLowerCase();
+function filterIngredients(list, { category, expiryWindow, search, lowStockOnly }) {
+  const q = (search || "").trim().toLowerCase();
 
   return list.filter((x) => {
     if (category && category !== "all" && x.category !== category) return false;
@@ -197,7 +197,7 @@ function render() {
       <li class="ingredient" data-id="${x.id}">
         <div>
           <div class="ingredient__titleRow">
-            <span class="ingredient__name" title="${x.name}">${x.name}</span>
+             <span class="ingredient__name" title="${x.name}">${x.name}</span>
             <span class="${badge.cls}">${badge.text}</span>
             ${low ? `<span class="badge badge--warn">Low stock</span>` : ``}
           </div>
