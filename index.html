@@ -3,6 +3,8 @@
     <title>My Web Page</title>
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="system.js" defer></script>
 </head>
 <body>
     <header>
@@ -12,8 +14,236 @@
         <section class="dashboard">
             <div class="dashboard-left">
                 <div class="left-card card">
-                    <h3>Left Dashboard</h3>
-                    <p>Add summary widgets or navigation here.</p>
+                    <h3>Ingrediants</h3>
+                    <div class="top-left-btn">
+                        <button id="add-btn"><i class="fa fa-plus"></i></button>
+                        <button id="search-btn"><i class="fa fa-search"></i></button>
+                        <button id="filter-btn"><i class="fa fa-filter"></i></button>   
+                    </div>
+                    <div class="controls">
+                        <div class="filter">
+                            <select id="filterCategory">
+                                <option value="all">All categories</option>
+                                <option value="dairy">dairy</option>
+                                <option value="veg">veg</option>
+                                <option value="meat">meat</option>
+                            </select>
+                            <select id="filterExpiry">
+                                <option value="all">All</option>
+                                <option value="expired">Expired</option>
+                                <option value="week">≤ 1 week</option>
+                                <option value="month">≤ 1 month</option>
+                            </select>
+                            <select id="sortBy">
+                                <option value="expiryAsc">Expiry ↑</option>
+                                <option value="expiryDesc">Expiry ↓</option>
+                                <option value="nameAsc">Name A→Z</option>
+                                <option value="stockLowFirst">Stock low first</option>
+                            </select>
+                            <label><input type="checkbox" id="lowStockOnly" /> Low stock only</label>
+                        </div>
+                        <div class="search">
+                            <div class="search-bar">
+                                <i class="fa fa-search"></i>
+                                <input id="ingredientSearch" placeholder="Search ingredients" />
+                                <i class="fa fa-remove" onclick="clearSearch('ingredientSearch')"></i>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="summary">
+                        Total: <span id="countTotal">0</span>
+                        · Expiring soon: <span id="countExpiring">0</span>
+                    </div>
+                    <div class="list-container">
+                        <ul id="ingredientsList" class="ingredientsList" aria-live="polite">
+                            <li class="ingredient" data-id="sdasd23213">
+                                <div>
+                                    <div class="viewTitleRow">
+                                        <span class="ingredient__name" title="${x.name}">Eggs</span>
+                                        <span class="a">1234</span>
+                                        <span class="badge badge--warn">Low stock</span>
+                                    </div>
+
+                                    <div class="ingredient__meta">
+                                        Meat<strong>2</strong> pcs
+                                         pcs · expires 2026-03-10
+                                    </div>
+
+                                    <div class="stockAdjust" aria-label="Adjust ingredient stock">
+                                        <label class="stockAdjust__label" for="adj-${x.id}">Adjust</label>
+                                        <input
+                                        class="stockAdjust__input"
+                                        id="adj-${x.id}"
+                                        data-role="adjustAmount"
+                                        type="number"
+                                        min="0"
+                                        step="${step}"
+                                        value="${x.unit === "pcs" ? "1" : "0.1"}"
+                                        inputmode="decimal"
+                                        aria-label="Adjustment amount"
+                                        />
+                                        <span class="stockAdjust__unit" aria-hidden="true">${x.unit}</span>
+
+                                        <button class="stock-btn" data-action="useAmount" type="button">Use</button>
+                                        <button class="stock-btn" data-action="addAmount" type="button">Add</button>
+                                        <button class="stock-btn" data-action="setAmount" type="button">Set</button>
+                                    </div>
+                                </div>
+
+                                <div class="ingredient__actions">
+                                    <button class="rowBtn rowBtn--danger" data-action="delete" type="button">Delete</button>
+                                </div>
+                            </li>
+                            <li class="ingredient" data-id="845002c7b362619cd109ced3">
+                                <div>
+                                    <div class="ingredient-top">
+                                        <div class="ingredient-title">
+                                            <span class="ingredient-name" title="Eggs">Egg</span>
+                                            <span class="tag tag-expiring">≤ 1 week</span>
+                                            <span class="tag tag-low-stock">Low stock</span>
+                                            
+                                        </div>
+                                        <div class="ingredient-actions">
+                                            <button class="ingredient-delete" data-action="delete" type="button">Delete</button>
+                                        </div>
+                                    </div>
+                                    <div class="ingredient-subtitle">
+                                        dairy · <strong>1</strong> pcs
+                                        · expires 2026-03-10
+                                    </div>
+
+                                    <div class="stock-controls">
+                                        <label class="stock-label">Adjust</label>
+                                        <button class="stock-btn" data-action="useAmount" type="button">Use</button>
+                                        <button class="stock-btn" data-action="addAmount" type="button">Add</button>
+                                        
+                                        <input class="stock-input" id="adj-845002c7b362619cd109ced3" data-role="adjustAmount" type="number" min="0" step="1" value="1" inputmode="decimal">
+                                        <span class="stockAdjust__unit">pcs</span>
+
+                                        <!-- <button class="stock-btn" data-action="setAmount" type="button">Set</button> -->
+                                    </div>
+                                    
+                                </div>
+
+                                
+                            </li>
+                            <li class="ingredient" data-id="845002c7b362619cd109ced3">
+                                <div>
+                                    <div class="ingredient__titleRow">
+                                        <span class="ingredient__name" title="Eggs">Eggs</span>
+                                        <span class="badge badge--danger">≤ 1 week</span>
+                                        <span class="badge badge--warn">Low stock</span>
+                                    </div>
+
+                                    <div class="ingredient__meta">
+                                        dairy · <strong>1</strong> pcs
+                                        · expires 2026-03-10
+                                    </div>
+
+                                    <div class="stockAdjust" aria-label="Adjust ingredient stock">
+                                        <label class="stockAdjust__label" for="adj-845002c7b362619cd109ced3">Adjust</label>
+                                        <button class="rowBtn" data-action="useAmount" type="button">Use</button>
+                                        <button class="rowBtn" data-action="addAmount" type="button">Add</button>
+                                        <button class="rowBtn" data-action="setAmount" type="button">Set</button>
+                                        <input class="stockAdjust__input" id="adj-845002c7b362619cd109ced3" data-role="adjustAmount" type="number" min="0" step="1" value="1" inputmode="decimal" aria-label="Adjustment amount">
+                                        <span class="stockAdjust__unit" aria-hidden="true">pcs</span>
+
+                                        
+                                    </div>
+                                </div>
+
+                                <div class="ingredient__actions">
+                                    <button class="rowBtn rowBtn--danger" data-action="delete" type="button">Delete</button>
+                                </div>
+                            </li>
+                            <li class="ingredient" data-id="845002c7b362619cd109ced3">
+                                <div>
+                                    <div class="ingredient__titleRow">
+                                        <span class="ingredient__name" title="Eggs">Eggs</span>
+                                        <span class="badge badge--danger">≤ 1 week</span>
+                                        <span class="badge badge--warn">Low stock</span>
+                                    </div>
+
+                                    <div class="ingredient__meta">
+                                        dairy · <strong>1</strong> pcs
+                                        · expires 2026-03-10
+                                    </div>
+
+                                    <div class="stockAdjust" aria-label="Adjust ingredient stock">
+                                        <label class="stockAdjust__label" for="adj-845002c7b362619cd109ced3">Adjust</label>
+                                        <input class="stockAdjust__input" id="adj-845002c7b362619cd109ced3" data-role="adjustAmount" type="number" min="0" step="1" value="1" inputmode="decimal" aria-label="Adjustment amount">
+                                        <span class="stockAdjust__unit" aria-hidden="true">pcs</span>
+
+                                        <button class="rowBtn" data-action="useAmount" type="button">Use</button>
+                                        <button class="rowBtn" data-action="addAmount" type="button">Add</button>
+                                        <button class="rowBtn" data-action="setAmount" type="button">Set</button>
+                                    </div>
+                                </div>
+
+                                <div class="ingredient__actions">
+                                    <button class="rowBtn rowBtn--danger" data-action="delete" type="button">Delete</button>
+                                </div>
+                            </li>
+                            <li class="ingredient" data-id="845002c7b362619cd109ced3">
+                                <div>
+                                    <div class="ingredient__titleRow">
+                                        <span class="ingredient__name" title="Eggs">Eggs</span>
+                                        <span class="badge badge--danger">≤ 1 week</span>
+                                        <span class="badge badge--warn">Low stock</span>
+                                    </div>
+
+                                    <div class="ingredient__meta">
+                                        dairy · <strong>1</strong> pcs
+                                        · expires 2026-03-10
+                                    </div>
+
+                                    <div class="stockAdjust" aria-label="Adjust ingredient stock">
+                                        <label class="stockAdjust__label" for="adj-845002c7b362619cd109ced3">Adjust</label>
+                                        <input class="stockAdjust__input" id="adj-845002c7b362619cd109ced3" data-role="adjustAmount" type="number" min="0" step="1" value="1" inputmode="decimal" aria-label="Adjustment amount">
+                                        <span class="stockAdjust__unit" aria-hidden="true">pcs</span>
+
+                                        <button class="rowBtn" data-action="useAmount" type="button">Use</button>
+                                        <button class="rowBtn" data-action="addAmount" type="button">Add</button>
+                                        <button class="rowBtn" data-action="setAmount" type="button">Set</button>
+                                    </div>
+                                </div>
+
+                                <div class="ingredient__actions">
+                                    <button class="rowBtn rowBtn--danger" data-action="delete" type="button">Delete</button>
+                                </div>
+                            </li>
+                            <li class="ingredient" data-id="845002c7b362619cd109ced3">
+                                <div>
+                                    <div class="ingredient__titleRow">
+                                        <span class="ingredient__name" title="Eggs">Eggs</span>
+                                        <span class="badge badge--danger">≤ 1 week</span>
+                                        <span class="badge badge--warn">Low stock</span>
+                                    </div>
+
+                                    <div class="ingredient__meta">
+                                        dairy · <strong>1</strong> pcs
+                                        · expires 2026-03-10
+                                    </div>
+
+                                    <div class="stockAdjust" aria-label="Adjust ingredient stock">
+                                        <label class="stockAdjust__label" for="adj-845002c7b362619cd109ced3">Adjust</label>
+                                        <input class="stockAdjust__input" id="adj-845002c7b362619cd109ced3" data-role="adjustAmount" type="number" min="0" step="1" value="1" inputmode="decimal" aria-label="Adjustment amount">
+                                        <span class="stockAdjust__unit" aria-hidden="true">pcs</span>
+
+                                        <button class="rowBtn" data-action="useAmount" type="button">Use</button>
+                                        <button class="rowBtn" data-action="addAmount" type="button">Add</button>
+                                        <button class="rowBtn" data-action="setAmount" type="button">Set</button>
+                                    </div>
+                                </div>
+
+                                <div class="ingredient__actions">
+                                    <button class="rowBtn rowBtn--danger" data-action="delete" type="button">Delete</button>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
                 </div>
             </div>
             <div class="dashboard-right">
@@ -23,6 +253,82 @@
                 </div>
             </div>
         </section>
+        <dialog id="ingredientModal">
+            <h2 id="ingredientModalTitle">Add ingredient</h2>
+            <form id="ingredientForm">
+            <div>
+                <label for="ingName">Name</label>
+                <input id="ingName" name="name" required />
+                <ul id="formNameSuggestions" class="suggestions" hidden>
+                    <li><a href="#">Apple</a></li>
+                    <li><a href="#">Banana</a></li>
+                    <li><a href="#">Carrot</a></li>
+                    <li><a href="#">Doughnut</a></li>
+                    <li><a href="#">Adele</a></li>
+                </ul>
+            </div>
+            <div>
+                <label for="ingCategory">Category</label>
+                <select id="ingCategory" name="category">
+                    <option value="Fruit">Fruit</option>
+                    <option value="Vegetables">Vegetables</option>
+                    <option value="Grains">Grains</option>
+                    <option value="Protein">Protein</option>
+                    <option value="Dairy">Dairy</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+            <div>
+                <label for="ingQty">Quantity</label>
+                <input id="ingQty" name="qty" type="number" step="0.1" value="1" required />
+                <label for="ingUnit">Unit</label>
+                <input id="ingUnit" name="unit" list="datalist-unit"/>
+                <datalist id="datalist-unit">
+                    <option value="bag">
+                    <option value="bar">
+                    <option value="bean">
+                    <option value="box">
+                    <option value="bunch">
+                    <option value="bundle">
+                    <option value="clove">
+                    <option value="cube">
+                    <option value="cup">
+                    <option value="dash">
+                    <option value="drop">
+                    <option value="ear">
+                    <option value="head">
+                    <option value="kit">
+                    <option value="leaf">
+                    <option value="link">
+                    <option value="oz">
+                    <option value="pack">
+                    <option value="packet">
+                    <option value="piece">
+                    <option value="pinch">
+                    <option value="scoop">
+                    <option value="second">
+                    <option value="sheet">
+                    <option value="slice">
+                    <option value="stalk">
+                    <option value="tbsp">
+                    <option value="tsp">
+                </datalist>
+            </div>
+            <div>
+                <label for="ingExpiry">Expiry (YYYY-MM-DD)</label>
+                <input id="ingExpiry" name="expiry" type="date" />
+            </div>
+            <div>
+                <label for="ingMinQty">Low stock threshold</label>
+                <input id="ingMinQty" name="minQty" type="number" value="0" />
+            </div>
+
+            <div class="modalActions">
+                <button type="submit">Save</button>
+                <button id="btnCancelModal" type="button">Cancel</button>
+            </div>
+            </form>
+        </dialog>
     </main>
 </body>
 </html>
