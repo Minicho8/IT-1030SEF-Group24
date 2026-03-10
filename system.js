@@ -1,3 +1,74 @@
+<!-- 自动从同目录导入固定的 123.csv 文件，无需用户选择 -->
+    <script>
+  (function() {
+    if (window.__mainScriptLoaded) return;
+    function loadMainScript() {
+      if (window.__mainScriptLoaded) return;
+      window.__mainScriptLoaded = true;
+      const script = document.createElement('script');
+      script.defer = true;
+      document.body.appendChild(script);
+    }
+
+    function parseCSVLine(line) {
+      const result = [];
+      let current = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') {
+          inQuotes = !inQuotes;
+        } else if (ch === ',' && !inQuotes) {
+          result.push(current.trim());
+          current = '';
+        } else {
+          current += ch;
+        }
+      }
+      result.push(current.trim());
+      return result;
+    }
+
+    const csvFileName = 'Recipe  - Sheet15.csv';<!--这里改成新的名字-->
+    fetch(csvFileName, { cache: 'no-cache' })
+      .then(response => {
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return response.text();
+      })
+      .then(text => {
+        try {
+          const lines = text.trim().split('\n');
+          const objects = lines.slice(1).map(line => {  // ← slice(1) 跳过列名行
+            const row = parseCSVLine(line);
+            return {
+              Recipe_Name:         row[0],
+              'Time Slot':         row[1],
+              Source_Website_Name: row[2],
+              Ingredients:         row[3],
+              'Cuisine/Region':    row[4],
+              'Difficulty (0-2)':  row[5],
+              Recipe_URL:          row[6],
+              Recipe_Image:        row[7] || '',  
+            };
+          });
+          localStorage.removeItem('recipeApp.Recipes');
+          localStorage.setItem('recipeApp.Recipes', JSON.stringify(objects));
+          console.log(`✅ 已自动从 ${csvFileName} 导入数据`);
+        } catch (e) {
+          console.error('解析 recipeApp.Recipes 时出错', e);
+        } finally {
+          loadMainScript();
+        }
+      })
+      .catch(err => {
+        console.warn(`自动导入 recipeApp.Recipes 失败 (${err.message})，将使用现有 localStorage 数据或空列表。`);
+        loadMainScript();
+      });
+  })();
+</script>
+
+
+
 
 const STORAGE_KEY = "recipeApp.ingredients";
 
