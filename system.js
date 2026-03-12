@@ -1,10 +1,12 @@
+var pluralize = typeof require === "function" ? require("pluralize") : window.pluralize;
+
 function loadMainScript() {
     if (window.__mainScriptLoaded) return;
     window.__mainScriptLoaded = true;
     const script = document.createElement('script');
     script.defer = true;
     document.body.appendChild(script);
-}
+ }
 
 function parseCSVLine(line) {
     const result = [];
@@ -357,7 +359,7 @@ document.getElementById('difficultyGroup').addEventListener('click', function (e
 document.getElementById('analyseBtn').addEventListener('click', function () {
     const selectedMeals = [...document.querySelectorAll('#mealGroup .selector-btn.active')].map(b => b.dataset.value);
     const selectedDifficulties = [...document.querySelectorAll('#difficultyGroup .selector-btn.active')].map(b => b.dataset.value);
-
+    
     if (selectedMeals.length === 0) {
         alert('Please select at least 1 meal time.');
         return;
