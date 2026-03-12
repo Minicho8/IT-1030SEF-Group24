@@ -93,8 +93,8 @@ if (ingredients.length === 0 && typeof defaultIngredients !== 'undefined') {
 function clearSearch(inputId) {
     const searchInput = document.getElementById(inputId);
     searchInput.value = '';
+    //filterList('');
     document.getElementsByClassName('search')[0].classList.remove('show');
-    buildView('left');
 }
 
 // Ingredients left panel
@@ -212,28 +212,9 @@ function updateIngredientsView() {
     return sortIngredients(filtered, document.getElementById('sortBy').value);
 }
 
-const FILTER_DEFAULTS = {
-    filterCategory: 'all',
-    filterExpiry: 'all',
-    sortBy: 'expiryAsc',
-    lowStockOnly: false,
-    ingredientSearch: ''
-};
-
-function checkResetBtn() {
-    const changed =
-        document.getElementById('filterCategory').value   !== FILTER_DEFAULTS.filterCategory ||
-        document.getElementById('filterExpiry').value     !== FILTER_DEFAULTS.filterExpiry    ||
-        document.getElementById('sortBy').value           !== FILTER_DEFAULTS.sortBy          ||
-        document.getElementById('lowStockOnly').checked   !== FILTER_DEFAULTS.lowStockOnly    ||
-        document.getElementById('ingredientSearch').value !== FILTER_DEFAULTS.ingredientSearch;
-    document.getElementById('resetFiltersBtn').hidden = !changed;
-}
-
 function buildView(view) {
     switch (view) {
         case 'left':
-        checkResetBtn();
         const viewdata = updateIngredientsView();
         let viewlist = "";
             for (const item of viewdata) {
@@ -364,68 +345,31 @@ document.getElementById("ingredientForm").addEventListener("submit", function(s)
 //Initial build
 buildView('left');
 
-document.getElementById('resetFiltersBtn').addEventListener('click', function () {
-    document.getElementById('filterCategory').value  = FILTER_DEFAULTS.filterCategory;
-    document.getElementById('filterExpiry').value    = FILTER_DEFAULTS.filterExpiry;
-    document.getElementById('sortBy').value          = FILTER_DEFAULTS.sortBy;
-    document.getElementById('lowStockOnly').checked  = FILTER_DEFAULTS.lowStockOnly;
-    document.getElementById('ingredientSearch').value = FILTER_DEFAULTS.ingredientSearch;
-    document.getElementsByClassName('search')[0].classList.remove('show');
-    buildView('left');
-});
-
-// ===== MOOD CHECK =====
-function openMoodModal() {
-    const questions = [
-        "How are you feeling right now?",
-        "What's your mood today?",
-        "How's your day going so far?"
-    ];
-    document.getElementById('moodQuestion').textContent =
-        questions[Math.floor(Math.random() * questions.length)];
-    // clear any previous selection
-    document.querySelectorAll('input[name="mood"]').forEach(r => r.checked = false);
-    document.getElementById('moodModal').showModal();
-}
-
-(function initMood() {
-    const MOOD_DATE_KEY = 'food_wise_date';
-    const MOOD_VAL_KEY  = 'food_wise_mood';
-    const today = new Date().toLocaleDateString('en-GB');
-
-    document.getElementById('moodForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const selected = document.querySelector('input[name="mood"]:checked');
-        if (!selected) { alert('Please select your mood.'); return; }
-        localStorage.setItem(MOOD_VAL_KEY, selected.value);
-        localStorage.setItem(MOOD_DATE_KEY, today);
-        document.getElementById('moodModal').close();
-    });
-
-    document.getElementById('btnSkipMood').addEventListener('click', function () {
-        localStorage.setItem(MOOD_DATE_KEY, today);
-        document.getElementById('moodModal').close();
-    });
-
-    const lastDate = localStorage.getItem(MOOD_DATE_KEY);
-    if (lastDate !== today) openMoodModal();
-})();
-
-document.getElementById('changeMoodBtn').addEventListener('click', openMoodModal);
-
 
 // ===== RIGHT PANEL: Meal & Difficulty Selector + Analyse =====
 
-document.getElementById('analyseBtn').addEventListener('click', function () {
-    const mealValue = document.getElementById('mealGroup').value;
-    const selectedMeals = mealValue ? [mealValue] : [];
+document.getElementById('mealGroup').addEventListener('click', function (e) {
+  const btn = e.target.closest('.selector-btn');
+  if (!btn) return;
+  btn.classList.toggle('active');
+});
 
-    const difficultyLevel = parseInt(document.getElementById('difficultyGroup').value, 10);
-    // Cascade: level N includes all levels 0..N
-    const selectedDifficulties = Array.from({ length: difficultyLevel + 1 }, (_, i) => String(i));
+document.getElementById('difficultyGroup').addEventListener('click', function (e) {
+  const btn = e.target.closest('.selector-btn');
+  if (!btn) return;
+  btn.classList.toggle('active');
+});
+
+document.getElementById('analyseBtn').addEventListener('click', function () {
+    const selectedMeals = [...document.querySelectorAll('#mealGroup .selector-btn.active')].map(b => b.dataset.value);
+    const selectedDifficulties = [...document.querySelectorAll('#difficultyGroup .selector-btn.active')].map(b => b.dataset.value);
 
     if (selectedMeals.length === 0) {
-        alert('Please select a meal time.');
+        alert('Please select at least 1 meal time.');
+        return;
+    }
+    if (selectedDifficulties.length === 0) {
+        alert('Please select at least 1 difficulty level.');
         return;
     }
 
@@ -438,18 +382,13 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
     const matchingIngs = analyseIngs.map(i => i.name.toLowerCase());
 
   const filtered = recipes.filter(r => {
-    const mealMatch = selectedMeals.some(m => String(r.timeSlot) === String(m));
+    const mealMatch = selectedMeals.some(m =>
+        console.log('Checking meal slot', r.timeSlot, 'against selected', m) ||
+      (r.timeSlot || '').toLowerCase().includes(m.toLowerCase())
+    );
     const diffMatch = selectedDifficulties.includes(String(r.difficulty));
     return mealMatch && diffMatch;
   });
-
-  const expiryFirst = document.getElementById('expiryFirst').checked;
-
-  // Build a lookup: ingredient name (lowercase) → days left
-  const expiryMap = {};
-  for (const ing of ingredients) {
-    expiryMap[ing.name.toLowerCase()] = ing.expiry ? daysleft(ing.expiry) : Infinity;
-  }
 
   const results = filtered.map(r => {
     const formatIngs = (r.ingredients || '')
@@ -459,25 +398,16 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
     console.log('Checking recipe:', r.recipeName, 'with ingredients', formatIngs);
     const matched = formatIngs.filter(ri =>
       matchingIngs.some(p => ri.includes(p))
+    //   matchingIngs.some(p => ri.includes(p) || p.includes(ri))
     );
     const matchRatio = formatIngs.length > 0 ? matched.length / formatIngs.length : 0;
-    // Urgency: minimum days-left among matched ingredients (lower = more urgent)
-    const urgencyScore = matched.length > 0
-      ? Math.min(...matched.map(ri => {
-          const key = Object.keys(expiryMap).find(p => ri.includes(p));
-          return key !== undefined ? expiryMap[key] : Infinity;
-        }))
-      : Infinity;
-    return { ...r, matched, formatIngs, matchRatio, urgencyScore };
+    console.log('Recipe:', r.recipeName, 'Ingredients:', formatIngs, 'Matched:', matched, 'Ratio:', matchRatio);
+    return { ...r, matched, formatIngs, matchRatio };
   });
 
-  if (expiryFirst) {
-    results.sort((a, b) => a.urgencyScore - b.urgencyScore || b.matchRatio - a.matchRatio);
-  } else {
-    results.sort((a, b) => b.matchRatio - a.matchRatio || Math.random() - 0.5);
-  }
+  results.sort((a, b) => b.matchRatio - a.matchRatio || Math.random() - 0.5);
 
-  let html = `<h3 class="results-heading">Showing top 10 suggested recipe(s) of ${results.length} found  recipe(s)</h3>`;
+  let html = `<h3 class="results-heading">Found ${results.length} recipe(s)</h3>`;
   if (results.length === 0) {
     html += `<p class="no-results">No recipes found for the selected filters.</p>`;
   }
@@ -491,19 +421,13 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
         <div class="recipe-info">
           <div class="recipe-title">${r.recipeName || 'Unknown'}</div>
           <div class="recipe-meta">
-            ${r.timeSlot || ''} · ${r.cuisine || 'Unknown'} Cuisine · Difficulty: ${r.difficulty ?? ''}
+            ${r.timeSlot || ''} · ${r.cuisine || ''} · Difficulty: ${r.difficulty ?? ''}
           </div>
           <div class="recipe-match">
             <div class="match-bar">
               <div class="match-fill" style="width:${pct}%"></div>
             </div>
             <span class="match-pct">${pct}% match (${r.matched.length}/${r.formatIngs.length})</span>
-          </div>
-          <div class="ing-chips">
-            ${r.formatIngs.map(ing => {
-              const isMatched = r.matched.includes(ing);
-              return `<span class="ing-chip ${isMatched ? 'ing-chip-ok' : 'ing-chip-missing'}">${ing}</span>`;
-            }).join('')}
           </div>
           ${r.recipeUrl
             ? `<a href="${r.recipeUrl}" target="_blank" class="recipe-link">View Recipe →</a>`
@@ -512,22 +436,4 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
       </div>`;
   }
   document.getElementById('analyseResults').innerHTML = html;
-
-  // Switch right panel to results view
-  const mealLabel = document.getElementById('mealGroup').options[document.getElementById('mealGroup').selectedIndex].text;
-  document.querySelector('.right-title').textContent = 'Recipe — ' + mealLabel;
-  document.querySelector('.right-controls .form').style.display = 'none';
-
-  // Add Analyse Again button
-  const againBtn = document.createElement('button');
-  againBtn.id = 'analyseAgainBtn';
-  againBtn.type = 'button';
-  againBtn.className = 'analyse-again-btn';
-  againBtn.innerHTML = '<i class="fa fa-refresh"></i> Analyse Again';
-  againBtn.addEventListener('click', function () {
-      document.getElementById('analyseResults').innerHTML = '';
-      document.querySelector('.right-title').textContent = 'Recipe';
-      document.querySelector('.right-controls .form').style.display = '';
-  });
-  document.getElementById('analyseResults').prepend(againBtn);
 });

@@ -11,6 +11,7 @@
 <body>
     <header>
         <h1>Welcome to My Web Page</h1>
+        <button id="changeMoodBtn" class="change-mood-btn"><i class="fa fa-smile-o"></i> Change Mood</button>
     </header>
     <main class="dashboard-page">
         <section class="dashboard">
@@ -59,6 +60,9 @@
                     <div class="summary">
                         Total: <span id="countTotal">0</span>
                         · Expiring soon: <span id="countExpiring">0</span>
+                        <button id="resetFiltersBtn" class="reset-filters-btn" hidden>
+                            <i class="fa fa-times"></i> Reset filters
+                        </button>
                     </div>
                     <div class="list-container">
                         <ul id="ingredientsList" class="ingredientsList" aria-live="polite"></ul>
@@ -75,11 +79,11 @@
                             <div class="group-block">
                                 <div class="group-hint">Meal Time (Select at least 1)<span class="req">*</span></div>
 
-                                <div id="mealGroup" class="selector-stack" role="group" aria-label="Meal time">
-                                <button type="button" class="selector-btn" data-value="0">Breakfast</button>
-                                <button type="button" class="selector-btn" data-value="1">Lunch</button>
-                                <button type="button" class="selector-btn" data-value="1">Dinner</button>
-                                </div>
+                                <select id="mealGroup" class="selector-dropdown" aria-label="Meal time">
+                                    <option value="0">Breakfast</option>
+                                    <option value="1">Lunch</option>
+                                    <option value="1">Dinner</option>
+                                </select>
                             </div>
 
                             <div class="group-divider">
@@ -87,12 +91,17 @@
                             </div>
 
                             <div class="group-block">
-                                <div id="difficultyGroup" class="selector-stack" role="group" aria-label="Difficulty">
-                                <button type="button" class="selector-btn" data-value="0">Level 0</button>
-                                <button type="button" class="selector-btn" data-value="1">Level 1</button>
-                                <button type="button" class="selector-btn" data-value="2">Level 2</button>
-                                </div>
+                                <select id="difficultyGroup" class="selector-dropdown" aria-label="Difficulty">
+                                    <option value="0">Easy</option>
+                                    <option value="1">Easy - Normal</option>
+                                    <option value="2">Easy - Hard</option>
+                                </select>
                             </div>
+
+                            <label class="expiry-first-label">
+                                <input type="checkbox" id="expiryFirst" />
+                                <span>🕐 Prioritise expiring ingredients first</span>
+                            </label>
 
                             <button id="analyseBtn" type="button" class="analyse-btn">
                                 Start Analyse Your Kitchen Stock
@@ -107,6 +116,57 @@
                 </div>
             </div>
         </section>
+        <dialog id="moodModal">
+            <form id="moodForm">
+                <h2 id="moodQuestion">How are you feeling right now?</h2>
+                <div class="mood-grid">
+                    <label class="mood-label">
+                        <input type="radio" name="mood" value="sad" />
+                        <span>😢 Sad</span>
+                    </label>
+                    <label class="mood-label">
+                        <input type="radio" name="mood" value="relax" />
+                        <span>😰 Stress</span>
+                    </label>
+                    <label class="mood-label">
+                        <input type="radio" name="mood" value="ease_depressed" />
+                        <span>😔 Depressed</span>
+                    </label>
+                    <label class="mood-label">
+                        <input type="radio" name="mood" value="focus" />
+                        <span>😵 Unfocused</span>
+                    </label>
+                    <label class="mood-label">
+                        <input type="radio" name="mood" value="relax" />
+                        <span>😱 Panic</span>
+                    </label>
+                    <label class="mood-label">
+                        <input type="radio" name="mood" value="relax" />
+                        <span>😬 Nervous</span>
+                    </label>
+                    <label class="mood-label">
+                        <input type="radio" name="mood" value="ease_angry" />
+                        <span>😠 Angry</span>
+                    </label>
+                    <label class="mood-label">
+                        <input type="radio" name="mood" value="ease_anxious" />
+                        <span>😟 Anxious</span>
+                    </label>
+                    <label class="mood-label">
+                        <input type="radio" name="mood" value="energy_recover" />
+                        <span>😩 Exhausted</span>
+                    </label>
+                    <label class="mood-label">
+                        <input type="radio" name="mood" value="none" />
+                        <span>😐 N/A</span>
+                    </label>
+                </div>
+                <div class="modalActions">
+                    <button type="submit">Save</button>
+                    <button id="btnSkipMood" type="button">Skip</button>
+                </div>
+            </form>
+        </dialog>
         <dialog id="ingredientModal">
             <h2 id="ingredientModalTitle">Add ingredient</h2>
             <form id="ingredientForm">
