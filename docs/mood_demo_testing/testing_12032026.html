@@ -1,0 +1,176 @@
+<!--write in main code (food wise system)-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mood_Selector</title>
+    <style>
+        #panel {
+            display: none;
+        }
+    </style>
+    <style>
+        .radio-toolbar {
+            margin: 10px;
+        }
+
+        .radio-toolbar input[type="radio"] {
+            opacity: 0;
+            position: fixed;
+            width: 0;
+        }
+
+        .radio-toolbar label {
+        display: inline-flex;
+        background-color: #ddd;
+        padding: 10px 20px;
+        font-family: sans-serif, Arial;
+        font-size: 16px;
+        border: 2px solid #444;
+        border-radius: 4px;
+        width: 90px;
+        justify-content: center;
+        }
+
+        .radio-toolbar label:hover {
+          background-color: #dfd;
+        }
+
+        .radio-toolbar input[type="radio"]:focus + label {
+            border: 2px solid #444;
+        }
+
+        .radio-toolbar input[type="radio"]:checked + label {
+            background-color: #bfb;
+            border-color: #4c4;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="panel" class="radio-toolbar"> 
+        <h1>Food Wise Kitchen System</h1>
+        <p>-This system is use to suggest recipes depends on your refrigerator and your mood</p>
+        <div id="AskMood"></div>
+        <form id="Form">
+            <fieldset>
+
+                <!--
+                <input type="radio" id="radioApple" name="radioFruit" value="apple" checked>
+                <label for="radioApple">Apple</label>
+                -->
+
+                <input type="radio" id="radioSad" name="mood" value="sad">    <!--change value (fix all)-->
+                <label for="radioSad">Sad</label>
+                <input type="radio" id="radioStress" name="mood" value="relax">
+                <label for="radioStress">Stress</label>
+                <input type="radio" id="radioDepressed" name="mood" value="ease_depressed">
+                <label for="radioDepressed">Depressed</label>
+                <input type="radio" id="radioUnfocused" name="mood" value="focus">
+                <label for="radioUnfocused">Unfocused</label>
+                <input type="radio" id="radioPanic" name="mood" value="relax">
+                <label for="radioPanic">Panic</label>
+                <br><br>
+                <input type="radio" id="radioNervous" name="mood" value="relax">
+                <label for="radioNervous">Nervous</label>
+                <input type="radio" id="radioAngry" name="mood" value="ease_angry">
+                <label for="radioAngry">Angry</label>
+                <input type="radio" id="radioAnxious" name="mood" value="ease_anxious">
+                <label for="radioAnxious">Anxious</label>
+                <input type="radio" id="radioExhausted" name="mood" value="energy_recover">
+                <label for="radioExhausted">Exhausted</label>
+                <input type="radio" id="radioN/A"  name="mood" value="none">
+                <label for="radioN/A">N/A</label>
+
+
+                <button type="submit">Save</button>
+                <button type="reset">Clear</button>
+            </fieldset>
+        </form>
+    </div>
+
+    <!--
+    <div><button type="button" onclick="location.reload()">Re-enter</button></div>
+    -->
+
+        <script>
+        function Panel_on() {
+            document.getElementById("panel").style.display = "block";
+        }
+        function Panel_off() {
+            document.getElementById("panel").style.display = "none";
+        }
+        
+        function randomAskMood(){
+            var ask_mood = ["How are you feeling right now?",
+                            "What\'s your mood today?",
+                            "How\'s your day going so far?"];
+            document.getElementById("AskMood").textContent = ask_mood[Math.floor(Math.random() * ask_mood.length)];
+        }
+        </script>
+
+        <script>
+        var record_date = new Date("January 01, 2025").toLocaleDateString('en-GB');  // save in local stroge     January 01, 2025    March 08, 2026
+        //let record_date = localStorage.getItem("food_wise_date");     localStorage
+        const today = new Date().toLocaleDateString('en-GB');
+
+        if (record_date != today) {
+            Panel_on();
+            // open mood selector (return needed values)
+            //checking
+            record_date = today;      //move
+            //console.log("run2");
+            //close()  ?
+            //Panel_off();
+        } else {
+            document.write("Turn to food wise system")
+            document.write("<div><button type=\"button\" onclick=\"location.reload()\">Re-enter</button></div>")
+        }
+        //button for re-open form 
+
+
+        // open food wise system (continous) (skip mood)
+        //console.log("run3");
+        </script>
+
+        <script>
+
+            const form = document.getElementById("Form");
+
+            form.addEventListener("submit",function(event) {
+                event.preventDefault();
+                //document.getElementById("panel").style.display = "none";      /Panel_off()   /move
+                console.log("run4");
+                
+                const selectedMood = document.querySelector('input[name="mood"]:checked');
+
+                console.log(selectedMood.value)
+
+                if (selectedMood === null) {
+                    alert("Please enter your mood.")
+                }
+                record_date = today;
+                //ask sad,return time+tag(list)
+                Panel_off();
+
+                if (selectedMood.value != "none") {
+                    //return array : array name = selectedMood.value
+                }
+                
+
+
+
+                document.write("Turn to food wise system")
+                document.write('<div><button type="button" onclick="location.reload()">Re-enter</button></div>')
+
+            })
+        </script>
+
+
+        <script>
+            window.onload = randomAskMood;
+        </script>
+
+</body>
+</html>
