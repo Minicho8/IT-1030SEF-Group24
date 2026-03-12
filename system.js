@@ -88,6 +88,10 @@ function saveIngredientsToStorage(list) {
 }
 
 let ingredients = loadIngredientsFromStorage();
+if (ingredients.length === 0 && typeof defaultIngredients !== 'undefined') {
+  ingredients = defaultIngredients;
+  saveIngredientsToStorage(ingredients);
+}
 
 // Search bar 
 function clearSearch(inputId) {
