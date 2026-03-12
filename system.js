@@ -84,6 +84,10 @@ function saveIngredientsToStorage(list) {
 }
 
 let ingredients = loadIngredientsFromStorage();
+if (ingredients.length === 0 && typeof defaultIngredients !== 'undefined') {
+  ingredients = defaultIngredients;
+  saveIngredientsToStorage(ingredients);
+}
 
 // Search bar 
 function clearSearch(inputId) {
@@ -359,7 +363,7 @@ document.getElementById('difficultyGroup').addEventListener('click', function (e
 document.getElementById('analyseBtn').addEventListener('click', function () {
     const selectedMeals = [...document.querySelectorAll('#mealGroup .selector-btn.active')].map(b => b.dataset.value);
     const selectedDifficulties = [...document.querySelectorAll('#difficultyGroup .selector-btn.active')].map(b => b.dataset.value);
-    
+
     if (selectedMeals.length === 0) {
         alert('Please select at least 1 meal time.');
         return;
@@ -389,7 +393,7 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
   const results = filtered.map(r => {
     const formatIngs = (r.ingredients || '')
       .split(",")
-      .map(s => s.trim().toLowerCase())
+      .map(s => pluralize.singular(s.trim().toLowerCase()))
       .filter(Boolean);
     console.log('Checking recipe:', r.recipeName, 'with ingredients', formatIngs);
     const matched = formatIngs.filter(ri =>
