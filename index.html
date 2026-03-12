@@ -65,8 +65,43 @@
             </div>
             <div class="dashboard-right">
                 <div class="right-card card">
-                    <h3>Right Dashboard</h3>
-                    <p>Add charts, tables, or details here.</p>
+                    <h2 class="right-title">Recipe</h2>
+
+
+                        <div class="right-controls">
+                            <div class="form">
+                            <div class="group-block">
+                                <div class="group-hint">Meal Time (Select at least 1)<span class="req">*</span></div>
+
+                                <div id="mealGroup" class="selector-stack" role="group" aria-label="Meal time">
+                                <button type="button" class="selector-btn" data-value="0">Breakfast</button>
+                                <button type="button" class="selector-btn" data-value="1">Lunch</button>
+                                <button type="button" class="selector-btn" data-value="1">Dinner</button>
+                                </div>
+                            </div>
+
+                            <div class="group-divider">
+                                <span class="group-hint">Recipe Difficulty (Select at least 1)<span class="req">*</span></span>
+                            </div>
+
+                            <div class="group-block">
+                                <div id="difficultyGroup" class="selector-stack" role="group" aria-label="Difficulty">
+                                <button type="button" class="selector-btn" data-value="0">Level 0</button>
+                                <button type="button" class="selector-btn" data-value="1">Level 1</button>
+                                <button type="button" class="selector-btn" data-value="2">Level 2</button>
+                                </div>
+                            </div>
+
+                            <button id="analyseBtn" type="button" class="analyse-btn">
+                                Start Analyse Your Kitchen Stock
+                            </button>
+
+                            <p class="analyse-help">
+                                Please Update your Kitchen Stock in the Ingridients Panel before continue
+                            </p>
+                            </div>
+                            <div id="analyseResults" class="analyse-results"></div>
+                        </div>
                 </div>
             </div>
         </section>

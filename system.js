@@ -1,71 +1,65 @@
-<!-- 自动从同目录导入固定的 123.csv 文件，无需用户选择 -->
-    <script>
-  (function() {
+function loadMainScript() {
     if (window.__mainScriptLoaded) return;
-    function loadMainScript() {
-      if (window.__mainScriptLoaded) return;
-      window.__mainScriptLoaded = true;
-      const script = document.createElement('script');
-      script.defer = true;
-      document.body.appendChild(script);
-    }
+    window.__mainScriptLoaded = true;
+    const script = document.createElement('script');
+    script.defer = true;
+    document.body.appendChild(script);
+}
 
-    function parseCSVLine(line) {
-      const result = [];
-      let current = '';
-      let inQuotes = false;
-      for (let i = 0; i < line.length; i++) {
-        const ch = line[i];
-        if (ch === '"') {
-          inQuotes = !inQuotes;
-        } else if (ch === ',' && !inQuotes) {
-          result.push(current.trim());
-          current = '';
-        } else {
-          current += ch;
-        }
-      }
-      result.push(current.trim());
-      return result;
+function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+        inQuotes = !inQuotes;
+    } else if (ch === ',' && !inQuotes) {
+        result.push(current.trim());
+        current = '';
+    } else {
+        current += ch;
     }
+    }
+    result.push(current.trim());
+    return result;
+}
 
-    const csvFileName = 'Recipe  - Sheet15.csv';<!--这里改成新的名字-->
-    fetch(csvFileName, { cache: 'no-cache' })
-      .then(response => {
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        return response.text();
-      })
-      .then(text => {
-        try {
-          const lines = text.trim().split('\n');
-          const objects = lines.slice(1).map(line => {  // ← slice(1) 跳过列名行
-            const row = parseCSVLine(line);
-            return {
-              Recipe_Name:         row[0],
-              'Time Slot':         row[1],
-              Source_Website_Name: row[2],
-              Ingredients:         row[3],
-              'Cuisine/Region':    row[4],
-              'Difficulty (0-2)':  row[5],
-              Recipe_URL:          row[6],
-              Recipe_Image:        row[7] || '',  
-            };
-          });
-          localStorage.removeItem('recipeApp.Recipes');
-          localStorage.setItem('recipeApp.Recipes', JSON.stringify(objects));
-          console.log(`✅ 已自动从 ${csvFileName} 导入数据`);
-        } catch (e) {
-          console.error('解析 recipeApp.Recipes 时出错', e);
-        } finally {
-          loadMainScript();
-        }
-      })
-      .catch(err => {
-        console.warn(`自动导入 recipeApp.Recipes 失败 (${err.message})，将使用现有 localStorage 数据或空列表。`);
-        loadMainScript();
-      });
-  })();
-</script>
+const csvFileName = 'recipes.csv';
+fetch(csvFileName, { cache: 'no-cache' })
+.then(response => {
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response.text();
+})
+.then(text => {
+try {
+    const lines = text.trim().split('\n');
+    const objects = lines.slice(1).map(line => {  // ← slice(1) 跳过列名行
+    const row = parseCSVLine(line);
+    return {
+        recipeName:         row[0],
+        timeSlot:           row[1],
+        source: row[2],
+        ingredients:         row[3],
+        cuisine:    row[4],
+        difficulty:  row[5],
+        recipeUrl:          row[6],
+        recipeImg:        row[7] || '',  
+    };
+    });
+    localStorage.removeItem('recipeApp.recipes');
+    localStorage.setItem('recipeApp.recipes', JSON.stringify(objects));
+    console.log(`✅ 已自动从 ${csvFileName} 导入数据`);
+} catch (e) {
+    console.error('解析 recipeApp.recipes 时出错', e);
+} finally {
+    loadMainScript();
+}
+})
+.catch(err => {
+    console.warn(`自动导入 recipeApp.Recipes 失败 (${err.message})，将使用现有 localStorage 数据或空列表。`);
+    loadMainScript();
+});
 
 
 
@@ -134,6 +128,27 @@ function addNewIngredient(data) {
   saveIngredientsToStorage(ingredients);
   buildView('left');
 }
+
+// async function fetchIngData(url) {
+//     try {
+//         const response = await fetch(url);
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! Status: ${response.status}`);
+//         }
+//         const data = await response.json();
+//         return data;
+//     } catch (error) {
+//         console.error('Error fetching JSON:', error);
+//     }
+// }
+
+// fetchIngData('./ingredients.txt').then(data => {
+//     ingredients = new Set([...data]);
+// });
+// function searchIngredients(key) {
+//     const lowerKeyword = key.trim().toLowerCase();
+//     return ingredients.filter(i => i.name.toLowerCase().includes(lowerKeyword));
+// }
 
 function deleteExistingIngredient(id) {
   ingredients = ingredients.filter((x) => x.id !== id);
@@ -323,3 +338,95 @@ document.getElementById("ingredientForm").addEventListener("submit", function(s)
 
 //Initial build
 buildView('left');
+
+
+// ===== RIGHT PANEL: Meal & Difficulty Selector + Analyse =====
+
+document.getElementById('mealGroup').addEventListener('click', function (e) {
+  const btn = e.target.closest('.selector-btn');
+  if (!btn) return;
+  btn.classList.toggle('active');
+});
+
+document.getElementById('difficultyGroup').addEventListener('click', function (e) {
+  const btn = e.target.closest('.selector-btn');
+  if (!btn) return;
+  btn.classList.toggle('active');
+});
+
+document.getElementById('analyseBtn').addEventListener('click', function () {
+    const selectedMeals = [...document.querySelectorAll('#mealGroup .selector-btn.active')].map(b => b.dataset.value);
+    const selectedDifficulties = [...document.querySelectorAll('#difficultyGroup .selector-btn.active')].map(b => b.dataset.value);
+
+    if (selectedMeals.length === 0) {
+        alert('Please select at least 1 meal time.');
+        return;
+    }
+    if (selectedDifficulties.length === 0) {
+        alert('Please select at least 1 difficulty level.');
+        return;
+    }
+
+    let recipes = [];
+    try {
+        const raw = localStorage.getItem('recipeApp.recipes');
+        recipes = raw ? JSON.parse(raw) : [];
+    } catch (e) { recipes = []; }
+    const analyseIngs = [...ingredients];
+    const matchingIngs = analyseIngs.map(i => i.name.toLowerCase());
+
+  const filtered = recipes.filter(r => {
+    const mealMatch = selectedMeals.some(m =>
+        console.log('Checking meal slot', r.timeSlot, 'against selected', m) ||
+      (r.timeSlot || '').toLowerCase().includes(m.toLowerCase())
+    );
+    const diffMatch = selectedDifficulties.includes(String(r.difficulty));
+    return mealMatch && diffMatch;
+  });
+
+  const results = filtered.map(r => {
+    const formatIngs = (r.ingredients || '')
+      .split(",")
+      .map(s => s.trim().toLowerCase())
+      .filter(Boolean);
+    console.log('Checking recipe:', r.recipeName, 'with ingredients', formatIngs);
+    const matched = formatIngs.filter(ri =>
+      matchingIngs.some(p => ri.includes(p) || p.includes(ri))
+    );
+    const matchRatio = formatIngs.length > 0 ? matched.length / formatIngs.length : 0;
+    console.log('Recipe:', r.recipeName, 'Ingredients:', formatIngs, 'Matched:', matched, 'Ratio:', matchRatio);
+    return { ...r, matched, formatIngs, matchRatio };
+  });
+
+  results.sort((a, b) => b.matchRatio - a.matchRatio || Math.random() - 0.5);
+
+  let html = `<h3 class="results-heading">Found ${results.length} recipe(s)</h3>`;
+  if (results.length === 0) {
+    html += `<p class="no-results">No recipes found for the selected filters.</p>`;
+  }
+  for (const r of results.slice(0, 10)) {
+    const pct = Math.round(r.matchRatio * 100);
+    html += `
+      <div class="recipe-card">
+        ${r.recipeImg
+          ? `<img src="${r.recipeImg}" class="recipe-img" onerror="this.style.display='none'">`
+          : ''}
+        <div class="recipe-info">
+          <div class="recipe-title">${r.recipeName || 'Unknown'}</div>
+          <div class="recipe-meta">
+            ${r.timeSlot || ''} · ${r.cuisine || ''} · Difficulty: ${r.difficulty ?? ''}
+          </div>
+          <div class="recipe-match">
+            <div class="match-bar">
+              <div class="match-fill" style="width:${pct}%"></div>
+            </div>
+            <span class="match-pct">${pct}% match (${r.matched.length}/${r.formatIngs.length})</span>
+          </div>
+          ${r.recipeUrl
+            ? `<a href="${r.recipeUrl}" target="_blank" class="recipe-link">View Recipe →</a>`
+            : ''}
+        </div>
+      </div>`;
+  }
+  document.getElementById('analyseResults').innerHTML = html;
+});
