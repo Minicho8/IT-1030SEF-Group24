@@ -253,7 +253,7 @@ header {
     top: 0;
 }
 
-.ingredient-delete {
+.red-btn {
     border: 1px solid rgb(171, 0, 0);
     background: rgba(255, 0, 0, 0.1);
     border-radius: 50px;
@@ -261,13 +261,13 @@ header {
     font-size: 11px;
     cursor: pointer;
 }
-.ingredient-delete:hover {
+.red-btn:hover {
     border: 1px solid rgb(171, 0, 0);
     background: rgba(255, 0, 0, 0.25);
 }
 
 .stock-btn {
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(108, 108, 108, 0.5);
     background: none;
     border-radius: 50px;
     padding: 4px 14px;
@@ -283,7 +283,7 @@ header {
 .stock-controls {
   margin-top: 10px;
   display: grid;
-  grid-template-columns: auto 1fr auto auto auto auto;
+  grid-template-columns: 10fr 10fr 13fr 20fr 20fr;
   gap: 8px;
   align-items: center;
 }
@@ -378,7 +378,13 @@ dialog::backdrop {
 
 /* ===== Ingredient Modal ===== */
 
-#ingredientModal input,#ingredientModal select {
+.expiry-target {
+  margin: 0 0 10px;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+#ingredientModal input,#ingredientModal select,#setExpiryModal input {
   width: 100%;
   padding: 4px 10px;
   margin: 8px 0;

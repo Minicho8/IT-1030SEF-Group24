@@ -1,62 +1,59 @@
 var pluralize = typeof require === "function" ? require("pluralize") : window.pluralize;
 
+//Data handeling
+const IMG_STORAGE_KEY = "recipeApp.ingredients";
+const RECIPE_STORAGE_KEY = "recipeApp.recipes";
+const recipeCSV = 'recipes.csv';
+
+
 function loadMainScript() {
     if (window.__mainScriptLoaded) return;
     window.__mainScriptLoaded = true;
     const script = document.createElement('script');
     script.defer = true;
     document.body.appendChild(script);
- }
+}
 
 function parseCSVLine(line) {
     const result = [];
     let current = '';
     let inQuotes = false;
     for (let i = 0; i < line.length; i++) {
-    const ch = line[i];
-    if (ch === '"') {
-        inQuotes = !inQuotes;
-    } else if (ch === ',' && !inQuotes) {
-        result.push(current.trim());
-        current = '';
-    } else {
-        current += ch;
-    }
+        const ch = line[i];
+        if (ch === '"') {
+            inQuotes = !inQuotes;
+        } else if (ch === ',' && !inQuotes) {
+            result.push(current.trim());
+            current = '';
+        } else {
+            current += ch;
+        }
     }
     result.push(current.trim());
     return result;
 }
 
-const csvFileName = 'recipes.csv';
-fetch(csvFileName, { cache: 'no-cache' })
-.then(response => {
+
+fetch(recipeCSV, { cache: 'no-cache' }).then(response => {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return response.text();
-})
-.then(text => {
-try {
-    const lines = text.trim().split('\n');
-    const objects = lines.slice(1).map(line => {  // ← slice(1) 跳过列名行
-    const row = parseCSVLine(line);
-    return {
-        recipeName:         row[0],
-        timeSlot:           row[1],
-        source: row[2],
-        ingredients:         row[3],
-        cuisine:    row[4],
-        difficulty:  row[5],
-        recipeUrl:          row[6],
-        recipeImg:        row[7] || '',  
-    };
-    });
-    localStorage.removeItem('recipeApp.recipes');
-    localStorage.setItem('recipeApp.recipes', JSON.stringify(objects));
-    console.log(`✅ 已自动从 ${csvFileName} 导入数据`);
-} catch (e) {
-    console.error('解析 recipeApp.recipes 时出错', e);
-} finally {
-    loadMainScript();
-}
+}).then(text => {
+    try {
+        const lines = text.trim().split('\n');
+        const objects = lines.slice(1).map(line => {
+            const row = parseCSVLine(line);
+            return {recipeName: row[0],timeSlot: row[1],source: row[2],ingredients: row[3],cuisine: row[4],difficulty: row[5],recipeUrl: row[6],recipeImg: row[7] || '',  };
+        });
+
+        localStorage.removeItem(RECIPE_STORAGE_KEY);
+        localStorage.setItem(RECIPE_STORAGE_KEY, JSON.stringify(objects));
+
+        console.log(`✅ 已自动从 ${recipeCSV} 导入数据`);
+    } catch (e) {
+        console.error('解析 recipeApp.recipes 时出错', e);
+    } finally {
+        loadMainScript();
+    }
 })
 .catch(err => {
     console.warn(`自动导入 recipeApp.Recipes 失败 (${err.message})，将使用现有 localStorage 数据或空列表。`);
@@ -65,12 +62,9 @@ try {
 
 
 
-
-const STORAGE_KEY = "recipeApp.ingredients";
-
 function loadIngredientsFromStorage() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(IMG_STORAGE_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : [];
@@ -80,7 +74,7 @@ function loadIngredientsFromStorage() {
 }
 
 function saveIngredientsToStorage(list) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+  localStorage.setItem(IMG_STORAGE_KEY, JSON.stringify(list));
 }
 
 let ingredients = loadIngredientsFromStorage();
@@ -157,9 +151,28 @@ function addNewIngredient(data) {
 // }
 
 function deleteExistingIngredient(id) {
-  ingredients = ingredients.filter((x) => x.id !== id);
-  saveIngredientsToStorage(ingredients);
-  buildView('left');
+    ingredients = ingredients.filter((x) => x.id !== id);
+    saveIngredientsToStorage(ingredients);
+    buildView('left');
+}
+
+function updateIngredientExpiry(id, expiry) {
+        ingredients = ingredients.map((item) => item.id === id ? { ...item, expiry } : item);
+        saveIngredientsToStorage(ingredients);
+        buildView('left');
+}
+
+function openSetExpiryModal(item) {
+    document.getElementById('setExpiryIngredientId').value = item.id;
+    document.getElementById('setExpiryDate').value = item.expiry || '';
+    document.getElementById('setExpiryTarget').textContent = `Ingredient: ${item.name}`;
+    document.getElementById('setExpiryModal').showModal();
+}
+
+function closeSetExpiryModal() {
+    if (document.getElementById('setExpiryModal').open) {
+        document.getElementById('setExpiryModal').close();
+    }
 }
 
 function filterIngredients(list, {category, expiry, search, lowStockOnly}) {
@@ -222,10 +235,10 @@ const FILTER_DEFAULTS = {
 
 function checkResetBtn() {
     const changed =
-        document.getElementById('filterCategory').value   !== FILTER_DEFAULTS.filterCategory ||
-        document.getElementById('filterExpiry').value     !== FILTER_DEFAULTS.filterExpiry    ||
-        document.getElementById('sortBy').value           !== FILTER_DEFAULTS.sortBy          ||
-        document.getElementById('lowStockOnly').checked   !== FILTER_DEFAULTS.lowStockOnly    ||
+        document.getElementById('filterCategory').value !== FILTER_DEFAULTS.filterCategory ||
+        document.getElementById('filterExpiry').value !== FILTER_DEFAULTS.filterExpiry ||
+        document.getElementById('sortBy').value !== FILTER_DEFAULTS.sortBy ||
+        document.getElementById('lowStockOnly').checked !== FILTER_DEFAULTS.lowStockOnly ||
         document.getElementById('ingredientSearch').value !== FILTER_DEFAULTS.ingredientSearch;
     document.getElementById('resetFiltersBtn').hidden = !changed;
 }
@@ -250,7 +263,7 @@ function buildView(view) {
                                 
                             </div>
                             <div class="ingredient-actions">
-                                <button class="ingredient-delete" data-action="delete" type="button">Delete</button>
+                                <button class="red-btn" data-action="delete" type="button">Delete</button>
                             </div>
                         </div>
                         <div class="ingredient-subtitle">
@@ -265,6 +278,7 @@ function buildView(view) {
                             
                             <input class="stock-input" id="adj-${item.id}" data-role="adjustAmount" type="number" min="0" step="1" value="1" inputmode="decimal">
                             <span class="stock-unit">${item.unit}</span>
+                            <button class="red-btn" data-action="setExpiry" type="button"><i class='fa fa-pencil'></i> Expires</button>
                         </div>
                     </div> 
                 </li>`;
@@ -285,9 +299,9 @@ function openAddModal() {
 }
 
 function closeModal() {
-  if (document.getElementById("ingredientModal").open) {
-    document.getElementById("ingredientModal").close();
-  }
+    if (document.getElementById("ingredientModal").open) {
+        document.getElementById("ingredientModal").close();
+    }
 }
 //** */
 function filterform() {
@@ -298,11 +312,11 @@ function filterform() {
     li = ul.getElementsByTagName('li');
     for (i = 0; i < li.length; i++) {
         a = li[i].getElementsByTagName("a")[0];
-        txtValue = a.textContent || a.innerText;
+        txtValue = (a.textContent || a.innerText);
         if (txtValue.toUpperCase().indexOf(filter) > -1 && li.length > 0) {
-        li[i].style.display = "";
+            li[i].style.display = "";
         } else {
-        li[i].style.display = "none";
+            li[i].style.display = "none";
         }
     }
 }
@@ -322,18 +336,34 @@ document.getElementById('filter-btn').addEventListener('click', function() {
     document.getElementsByClassName('filter')[0].classList.toggle('show');
 });
 document.getElementById('ingredientsList').addEventListener('click', function(event) {
-    const action = event.target.getAttribute('data-action');
+    const actionEl = event.target.closest('[data-action]');
+    if (!actionEl) return;
+
+    const action = actionEl.getAttribute('data-action');
+    const itemEl = actionEl.closest('li[data-id]');
+    if (!itemEl) return;
+
+    const id = itemEl.getAttribute('data-id');
     console.log('Clicked element action:', action);
+
     switch (action) {
-        case "delete":
-            const id = event.target.closest("li[data-id]").getAttribute("data-id");
+        case "delete": {
             deleteExistingIngredient(id);
             console.log('Deleted ingredient with id:', id);
             break;
-        case "useAmount":
-            const useId = event.target.closest("li[data-id]").getAttribute("data-id");
+        }
+        case "setExpiry": {
+            const item = ingredients.find((x) => x.id === id);
+            if (!item) return;
+
+            openSetExpiryModal(item);
+            break;
+        }
+        case "useAmount": {
+            const useId = id;
+            break;
+        }
     }
-    
 });
 document.getElementById('filterCategory').addEventListener('change', buildView.bind(null, 'left'));
 document.getElementById('filterExpiry').addEventListener('change', buildView.bind(null, 'left'));
@@ -345,6 +375,25 @@ document.getElementById('sortBy').addEventListener('change', buildView.bind(null
 //Add new ingredient modal
 document.getElementById('add-btn').addEventListener("click", openAddModal);
 document.getElementById('btnCancelModal').addEventListener("click", closeModal);
+document.getElementById('btnCancelSetExpiry').addEventListener('click', closeSetExpiryModal);
+
+document.getElementById('btnClearSetExpiry').addEventListener('click', function () {
+    const id = document.getElementById('setExpiryIngredientId').value;
+    if (!id) return;
+
+    updateIngredientExpiry(id, '');
+    closeSetExpiryModal();
+});
+
+document.getElementById('setExpiryForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const id = document.getElementById('setExpiryIngredientId').value;
+    if (!id) return;
+
+    const nextExpiry = document.getElementById('setExpiryDate').value || '';
+    updateIngredientExpiry(id, nextExpiry);
+    closeSetExpiryModal();
+});
 
 document.getElementById("ingredientForm").addEventListener("submit", function(s) {
   s.preventDefault();
@@ -388,7 +437,7 @@ function openMoodModal() {
     document.getElementById('moodModal').showModal();
 }
 
-(function initMood() {
+function initMood() {
     const MOOD_DATE_KEY = 'food_wise_date';
     const MOOD_VAL_KEY  = 'food_wise_mood';
     const today = new Date().toLocaleDateString('en-GB');
@@ -409,7 +458,8 @@ function openMoodModal() {
 
     const lastDate = localStorage.getItem(MOOD_DATE_KEY);
     if (lastDate !== today) openMoodModal();
-})();
+};
+initMood();
 
 document.getElementById('changeMoodBtn').addEventListener('click', openMoodModal);
 
@@ -437,11 +487,11 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
     const analyseIngs = [...ingredients];
     const matchingIngs = analyseIngs.map(i => i.name.toLowerCase());
 
-  const filtered = recipes.filter(r => {
-    const mealMatch = selectedMeals.some(m => String(r.timeSlot) === String(m));
-    const diffMatch = selectedDifficulties.includes(String(r.difficulty));
-    return mealMatch && diffMatch;
-  });
+    const filtered = recipes.filter(r => {
+        const mealMatch = selectedMeals.some(m => String(r.timeSlot) === String(m));
+        const diffMatch = selectedDifficulties.includes(String(r.difficulty));
+        return mealMatch && diffMatch;
+    });
 
   const expiryFirst = document.getElementById('expiryFirst').checked;
 

@@ -72,10 +72,8 @@
             <div class="dashboard-right">
                 <div class="right-card card">
                     <h2 class="right-title">Recipe</h2>
-
-
-                        <div class="right-controls">
-                            <div class="form">
+                    <div class="right-controls">
+                        <div class="form">
                             <div class="group-block">
                                 <div class="group-hint">Meal Time (Select at least 1)<span class="req">*</span></div>
 
@@ -86,12 +84,10 @@
                                 </select>
                             </div>
 
-                            <div class="group-divider">
-                                <span class="group-hint">Recipe Difficulty (Select at least 1)<span class="req">*</span></span>
-                            </div>
-
                             <div class="group-block">
-                                <select id="difficultyGroup" class="selector-dropdown" aria-label="Difficulty">
+                                <span class="group-hint">Recipe Difficulty (Select at least 1)<span class="req">*</span></span>
+
+                                <select id="difficultyGroup" class="selector-dropdown input-block" aria-label="Difficulty">
                                     <option value="0">Easy</option>
                                     <option value="1">Easy - Normal</option>
                                     <option value="2">Easy - Hard</option>
@@ -110,9 +106,9 @@
                             <p class="analyse-help">
                                 Please Update your Kitchen Stock in the Ingridients Panel before continue
                             </p>
-                            </div>
-                            <div id="analyseResults" class="analyse-results"></div>
                         </div>
+                        <div id="analyseResults" class="analyse-results"></div>    
+                    </div>
                 </div>
             </div>
         </section>
@@ -164,6 +160,22 @@
                 <div class="modalActions">
                     <button type="submit">Save</button>
                     <button id="btnSkipMood" type="button">Skip</button>
+                </div>
+            </form>
+        </dialog>
+        <dialog id="setExpiryModal">
+            <h2>Update expiry date</h2>
+            <p id="setExpiryTarget" class="expiry-target"></p>
+            <form id="setExpiryForm">
+                <input id="setExpiryIngredientId" type="hidden" />
+                <div>
+                    <label for="setExpiryDate">Expiry date</label>
+                    <input id="setExpiryDate" name="expiry" type="date" />
+                </div>
+                <div class="modalActions">
+                    <button type="submit">Save</button>
+                    <button id="btnClearSetExpiry" type="button">Clear date</button>
+                    <button id="btnCancelSetExpiry" type="button">Cancel</button>
                 </div>
             </form>
         </dialog>
