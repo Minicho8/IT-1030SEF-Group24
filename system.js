@@ -437,29 +437,21 @@ function openMoodModal() {
     document.getElementById('moodModal').showModal();
 }
 
-function initMood() {
-    const MOOD_DATE_KEY = 'food_wise_date';
-    const MOOD_VAL_KEY  = 'food_wise_mood';
-    const today = new Date().toLocaleDateString('en-GB');
+const MOOD_DATE_KEY = 'food_wise_date';
+const MOOD_VAL_KEY  = 'food_wise_mood';
+const today = new Date().toLocaleDateString('en-GB');
 
-    document.getElementById('moodForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-        const selected = document.querySelector('input[name="mood"]:checked');
-        if (!selected) { alert('Please select your mood.'); return; }
-        localStorage.setItem(MOOD_VAL_KEY, selected.value);
-        localStorage.setItem(MOOD_DATE_KEY, today);
-        document.getElementById('moodModal').close();
-    });
+document.getElementById('moodForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const selected = document.querySelector('input[name="mood"]:checked');
+    if (!selected) { alert('Please select your mood.'); return; }
+    localStorage.setItem(MOOD_VAL_KEY, selected.value);
+    localStorage.setItem(MOOD_DATE_KEY, today);
+    document.getElementById('moodModal').close();
+});
 
-    document.getElementById('btnSkipMood').addEventListener('click', function () {
-        localStorage.setItem(MOOD_DATE_KEY, today);
-        document.getElementById('moodModal').close();
-    });
-
-    const lastDate = localStorage.getItem(MOOD_DATE_KEY);
-    if (lastDate !== today) openMoodModal();
-};
-initMood();
+const lastDate = localStorage.getItem(MOOD_DATE_KEY);
+if (lastDate !== today) openMoodModal();
 
 document.getElementById('changeMoodBtn').addEventListener('click', openMoodModal);
 
