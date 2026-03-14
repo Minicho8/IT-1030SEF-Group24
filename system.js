@@ -533,7 +533,7 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
         <div class="recipe-info">
           <div class="recipe-title">${r.recipeName || 'Unknown'}</div>
           <div class="recipe-meta">
-            ${r.timeSlot || ''} · ${r.cuisine || 'Unknown'} Cuisine · Difficulty: ${r.difficulty ?? ''}
+            ${r.source || 'Internet'} · ${r.cuisine || 'Unknown'} Cuisine · Difficulty: ${r.difficulty == '0' ? 'Easy' : r.difficulty === '1' ? 'Normal' : 'Hard'}
           </div>
           <div class="recipe-match">
             <div class="match-bar">
@@ -542,7 +542,7 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
             <span class="match-pct">${pct}% match (${r.matched.length}/${r.formatIngs.length})</span>
           </div>
           <div class="ing-chips">
-            ${r.formatIngs.map(ing => {
+            ${r.formatIngs.sort((a,b) => a.localeCompare(b)).map(ing => {
               const isMatched = r.matched.includes(ing);
               return `<span class="ing-chip ${isMatched ? 'ing-chip-ok' : 'ing-chip-missing'}">${ing}</span>`;
             }).join('')}
