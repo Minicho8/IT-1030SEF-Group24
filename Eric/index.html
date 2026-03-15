@@ -1,0 +1,195 @@
+<html>
+<head>
+    <title>My Web Page</title>
+    <link rel="stylesheet" href="light version.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="pluralize.js"></script>
+    <script src="ingredients.js"></script>
+    <script src="system.js" defer></script>
+    <div class="ui-controls" style="position: fixed; top: 20px; right: 20px; display: flex; gap: 10px; z-index: 1000;">
+    <button class="ui-btn" onclick="changeFontSize(-2)">A-</button>
+    <button class="ui-btn" onclick="resetFontSize()">Reset</button>
+    <button class="ui-btn" onclick="changeFontSize(2)">A+</button>
+    </div>
+</head>
+<body>
+    <header>
+        <h1>Welcome to My Web Page</h1>
+    </header>
+    <main class="dashboard-page">
+        <section class="dashboard">
+            <div class="dashboard-left">
+                <div class="left-card card">
+                    <h3>Ingrediants</h3>
+                    <div class="top-left-btn">
+                        <button id="add-btn"><i class="fa fa-plus"></i></button>
+                        <button id="search-btn"><i class="fa fa-search"></i></button>
+                        <button id="filter-btn"><i class="fa fa-filter"></i></button>   
+                    </div>
+                    <div class="controls">
+                        <div class="filter">
+                            <select id="filterCategory">
+                                <option value="all">All categories</option>
+                                <option value="Fruit">Fruit</option>
+                                <option value="Vegetables">Vegetables</option>
+                                <option value="Grains">Grains</option>
+                                <option value="Protein">Protein</option>
+                                <option value="Dairy">Dairy</option>
+                                <option value="Others">Others</option>
+                            </select>
+                            <select id="filterExpiry">
+                                <option value="all">All Due Dates</option>
+                                <option value="expired">Expired</option>
+                                <option value="week">≤ 1 week</option>
+                                <option value="month">≤ 1 month</option>
+                            </select>
+                            <select id="sortBy">
+                                <option value="expiryAsc">Expiry ↑</option>
+                                <option value="expiryDesc">Expiry ↓</option>
+                                <option value="nameAsc">Name A→Z</option>
+                                <option value="stockLowFirst">Stock low first</option>
+                            </select>
+                            <label><input type="checkbox" id="lowStockOnly" /> Low stock only</label>
+                        </div>
+                        <div class="search">
+                            <div class="search-bar">
+                                <i class="fa fa-search"></i>
+                                <input id="ingredientSearch" placeholder="Search ingredients" />
+                                <i class="fa fa-remove" onclick="clearSearch('ingredientSearch')"></i>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="summary">
+                        Total: <span id="countTotal">0</span>
+                        · Expiring soon: <span id="countExpiring">0</span>
+                    </div>
+                    <div class="list-container">
+                        <ul id="ingredientsList" class="ingredientsList" aria-live="polite"></ul>
+                    </div>
+                </div>
+            </div>
+            <div class="dashboard-right">
+                <div class="right-card card">
+                    <h2 class="right-title">Recipe</h2>
+
+
+                        <div class="right-controls">
+                            <div class="form">
+                            <div class="group-block">
+                                <div class="group-hint">Meal Time (Select at least 1)<span class="req">*</span></div>
+
+                                <div id="mealGroup" class="selector-stack" role="group" aria-label="Meal time">
+                                <button type="button" class="selector-btn" data-value="0">Breakfast</button>
+                                <button type="button" class="selector-btn" data-value="1">Lunch</button>
+                                <button type="button" class="selector-btn" data-value="1">Dinner</button>
+                                </div>
+                            </div>
+
+                            <div class="group-divider">
+                                <span class="group-hint">Recipe Difficulty (Select at least 1)<span class="req">*</span></span>
+                            </div>
+
+                            <div class="group-block">
+                                <div id="difficultyGroup" class="selector-stack" role="group" aria-label="Difficulty">
+                                <button type="button" class="selector-btn" data-value="0">Level 0</button>
+                                <button type="button" class="selector-btn" data-value="1">Level 1</button>
+                                <button type="button" class="selector-btn" data-value="2">Level 2</button>
+                                </div>
+                            </div>
+
+                            <button id="analyseBtn" type="button" class="analyse-btn">
+                                Start Analyse Your Kitchen Stock
+                            </button>
+
+                            <p class="analyse-help">
+                                Please Update your Kitchen Stock in the Ingridients Panel before continue
+                            </p>
+                            </div>
+                            <div id="analyseResults" class="analyse-results"></div>
+                        </div>
+                </div>
+            </div>
+        </section>
+        <dialog id="ingredientModal">
+            <h2 id="ingredientModalTitle">Add ingredient</h2>
+            <form id="ingredientForm">
+            <div>
+                <label for="ingName">Name</label>
+                <input id="ingName" name="name" required />
+                <ul id="formNameSuggestions" class="suggestions" hidden>
+                    <li><a href="#">Apple</a></li>
+                    <li><a href="#">Banana</a></li>
+                    <li><a href="#">Carrot</a></li>
+                    <li><a href="#">Doughnut</a></li>
+                    <li><a href="#">Adele</a></li>
+                </ul>
+            </div>
+            <div>
+                <label for="ingCategory">Category</label>
+                <select id="ingCategory" name="category">
+                    <option value="Fruit">Fruit</option>
+                    <option value="Vegetables">Vegetables</option>
+                    <option value="Grains">Grains</option>
+                    <option value="Protein">Protein</option>
+                    <option value="Dairy">Dairy</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
+            <div>
+                <label for="ingQty">Quantity</label>
+                <input id="ingQty" name="qty" type="number" step="1" value="1" required />
+                <label for="ingUnit">Unit</label>
+                <!-- <input id="ingUnit" name="unit" list="datalist-unit" required />
+                <datalist id="datalist-unit"> -->
+                <select name="unit" id="ingUnit" defaultValue="piece">
+                    <option value="bag">Bag</option>
+                    <option value="bar">Bar</option>
+                    <option value="bean">Bean</option>
+                    <option value="box">Box</option>
+                    <option value="bunch">Bunch</option>
+                    <option value="bundle">Bundle</option>
+                    <option value="clove">Clove</option>
+                    <option value="cube">Cube</option>
+                    <option value="cup">Cup</option>
+                    <option value="dash">Dash</option>
+                    <option value="drop">Drop</option>
+                    <option value="ear">Ear</option>
+                    <option value="head">Head</option>
+                    <option value="kit">Kit</option>
+                    <option value="leaf">Leaf</option>
+                    <option value="link">Link</option>
+                    <option value="oz">Oz</option>
+                    <option value="pack">Pack</option>
+                    <option value="packet">Packet</option>
+                    <option value="piece">Piece</option>
+                    <option value="pinch">Pinch</option>
+                    <option value="scoop">Scoop</option>
+                    <option value="second">Second</option>
+                    <option value="sheet">Sheet</option>
+                    <option value="slice">Slice</option>
+                    <option value="stalk">Stalk</option>
+                    <option value="tbsp">Tbsp</option>
+                    <option value="tsp">Tsp</option>
+                </select>
+                <!-- </datalist> -->
+            </div>
+            <div>
+                <label for="ingExpiry">Expiry (YYYY-MM-DD)</label>
+                <input id="ingExpiry" name="expiry" type="date" />
+            </div>
+            <!-- <div>
+                <label for="ingMinQty">Low stock threshold</label>
+                <input id="ingMinQty" name="minQty" type="number" value="0" />
+            </div> -->
+
+            <div class="modalActions">
+                <button type="submit">Save</button>
+                <button id="btnCancelModal" type="button">Cancel</button>
+            </div>
+            </form>
+        </dialog>
+    </main>
+</body>
+</html>
