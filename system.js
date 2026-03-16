@@ -392,12 +392,6 @@ function buildView(view) {
                     <div class="recipe-meta">
                         ${r.source || 'Internet'} · ${r.cuisine || 'Unknown'} Cuisine · Difficulty: ${r.difficulty == '0' ? 'Easy' : r.difficulty === '1' ? 'Normal' : 'Hard'}
                     </div>
-                    <div class="recipe-match">
-                        <div class="match-bar">
-                        <div class="match-fill" style="width:${pct}%"></div>
-                        </div>
-                        <span class="match-pct">${pct}% match (${r.matched.length}/${r.formatIngs.length})</span>
-                    </div>
                     <div class="ing-chips">
                         ${r.formatIngs.sort((a,b) => a.localeCompare(b)).map(ing => {
                         const isMatched = r.matched.includes(ing);
