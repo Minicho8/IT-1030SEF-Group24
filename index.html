@@ -62,7 +62,7 @@
                     </div>
                     <div class="summary">
                         Total: <span id="countTotal">0</span>
-                        · Expiring soon: <span id="countExpiring">0</span>
+                        · Expiring soon: <span id="countExpiring">0</span> Ingredients
                         <button id="resetFiltersBtn" class="reset-filters-btn" hidden>
                             <i class="fa fa-times"></i> Reset filters
                         </button>
@@ -74,7 +74,10 @@
             </div>
             <div class="dashboard-right">
                 <div class="right-card card">
-                    <h2 class="right-title">Recipe</h2>
+                    <div class="right-header">
+                        <h2 class="right-title">Recipe</h2>
+                        <div id="rightTitleActions" class="right-title-actions"></div>
+                    </div>
                     <div class="right-controls">
                         <div class="form">
                             <div class="group-block">
@@ -98,12 +101,12 @@
                             </div>
                             
 
-                            <label class="expiry-first-label">
+                            <label class="checkbox-btn">
                                 <input type="checkbox" id="expiryFirst" />
                                 <span>🕐 Prioritise expiring ingredients first</span>
                             </label>
 
-                            <label class="expiry-first-label">
+                            <label class="checkbox-btn">
                                 <input type="checkbox" id="moodSuggest" />
                                 <span>Suggest recipes by current mood</span>
                             </label>
@@ -193,13 +196,6 @@
             <div>
                 <label for="ingName">Name</label>
                 <input id="ingName" name="name" required />
-                <ul id="formNameSuggestions" class="suggestions" hidden>
-                    <li><a href="#">Apple</a></li>
-                    <li><a href="#">Banana</a></li>
-                    <li><a href="#">Carrot</a></li>
-                    <li><a href="#">Doughnut</a></li>
-                    <li><a href="#">Adele</a></li>
-                </ul>
             </div>
             <div>
                 <label for="ingCategory">Category</label>
@@ -213,52 +209,13 @@
                 </select>
             </div>
             <div>
-                <label for="ingQty">Quantity</label>
+                <label for="ingQty">Quantity - Servings</label>
                 <input id="ingQty" name="qty" type="number" step="1" value="1" required />
-                <label for="ingUnit">Unit</label>
-                <!-- <input id="ingUnit" name="unit" list="datalist-unit" required />
-                <datalist id="datalist-unit"> -->
-                <select name="unit" id="ingUnit" defaultValue="piece">
-                    <option value="bag">Bag</option>
-                    <option value="bar">Bar</option>
-                    <option value="bean">Bean</option>
-                    <option value="box">Box</option>
-                    <option value="bunch">Bunch</option>
-                    <option value="bundle">Bundle</option>
-                    <option value="clove">Clove</option>
-                    <option value="cube">Cube</option>
-                    <option value="cup">Cup</option>
-                    <option value="dash">Dash</option>
-                    <option value="drop">Drop</option>
-                    <option value="ear">Ear</option>
-                    <option value="head">Head</option>
-                    <option value="kit">Kit</option>
-                    <option value="leaf">Leaf</option>
-                    <option value="link">Link</option>
-                    <option value="oz">Oz</option>
-                    <option value="pack">Pack</option>
-                    <option value="packet">Packet</option>
-                    <option value="piece">Piece</option>
-                    <option value="pinch">Pinch</option>
-                    <option value="scoop">Scoop</option>
-                    <option value="second">Second</option>
-                    <option value="sheet">Sheet</option>
-                    <option value="slice">Slice</option>
-                    <option value="stalk">Stalk</option>
-                    <option value="tbsp">Tbsp</option>
-                    <option value="tsp">Tsp</option>
-                </select>
-                <!-- </datalist> -->
             </div>
             <div>
                 <label for="ingExpiry">Expiry (YYYY-MM-DD)</label>
                 <input id="ingExpiry" name="expiry" type="date" />
             </div>
-            <!-- <div>
-                <label for="ingMinQty">Low stock threshold</label>
-                <input id="ingMinQty" name="minQty" type="number" value="0" />
-            </div> -->
-
             <div class="modalActions">
                 <button type="submit">Save</button>
                 <button id="btnCancelModal" type="button">Cancel</button>
