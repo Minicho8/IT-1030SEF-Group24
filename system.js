@@ -162,6 +162,23 @@ function updateIngredientExpiry(id, expiry) {
         buildView('left');
 }
 
+function updateIngredientStock(id, { deltaQty, setQty } = {}) {
+  ingredients = ingredients.map((x) => {
+    if (x.id !== id) return x;
+
+    const current = Number(x.qty);
+    const next =
+      typeof setQty === "number"
+        ? clampToZero(setQty)
+        : clampToZero(current + Number(deltaQty || 0));
+
+    return { ...x, qty: next };
+  });
+
+  saveIngredientsToStorage(ingredients);
+  buildView('left');
+}
+
 function openSetExpiryModal(item) {
     document.getElementById('setExpiryIngredientId').value = item.id;
     document.getElementById('setExpiryDate').value = item.expiry || '';
@@ -198,6 +215,9 @@ function sortIngredients(list,sortBy) {
     switch (sortBy) {
     case "nameAsc":
         temp.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+    case "nameDesc":
+        temp.sort((a, b) => b.name.localeCompare(a.name));
         break;
     case "expiryDesc":
         temp.sort((a, b) => (daysleft(b.expiry)) - (daysleft(a.expiry)));
@@ -240,7 +260,7 @@ function checkResetBtn() {
         document.getElementById('sortBy').value !== FILTER_DEFAULTS.sortBy ||
         document.getElementById('lowStockOnly').checked !== FILTER_DEFAULTS.lowStockOnly ||
         document.getElementById('ingredientSearch').value !== FILTER_DEFAULTS.ingredientSearch;
-    document.getElementById('resetFiltersBtn').hidden = !changed;
+        document.getElementById('resetFiltersBtn').hidden = !changed;
 }
 
 function buildView(view) {
@@ -291,6 +311,7 @@ function buildView(view) {
     }
 }
 
+
 function openAddModal() {
     document.getElementById("ingredientForm").reset();
     document.getElementById("ingQty").value = "1";
@@ -301,23 +322,6 @@ function openAddModal() {
 function closeModal() {
     if (document.getElementById("ingredientModal").open) {
         document.getElementById("ingredientModal").close();
-    }
-}
-//** */
-function filterform() {
-    var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById('myInput');
-    filter = input.value.toUpperCase();
-    ul = document.getElementById("myUL");
-    li = ul.getElementsByTagName('li');
-    for (i = 0; i < li.length; i++) {
-        a = li[i].getElementsByTagName("a")[0];
-        txtValue = (a.textContent || a.innerText);
-        if (txtValue.toUpperCase().indexOf(filter) > -1 && li.length > 0) {
-            li[i].style.display = "";
-        } else {
-            li[i].style.display = "none";
-        }
     }
 }
 
@@ -336,15 +340,20 @@ document.getElementById('filter-btn').addEventListener('click', function() {
     document.getElementsByClassName('filter')[0].classList.toggle('show');
 });
 document.getElementById('ingredientsList').addEventListener('click', function(event) {
-    const actionEl = event.target.closest('[data-action]');
-    if (!actionEl) return;
+    const element = event.target.closest('[data-action]');
+    if (!element) return;
 
-    const action = actionEl.getAttribute('data-action');
-    const itemEl = actionEl.closest('li[data-id]');
-    if (!itemEl) return;
-
-    const id = itemEl.getAttribute('data-id');
+    const action = element.getAttribute('data-action');
+    const itemE = element.closest('li[data-id]');
+    if (!itemE) return;
+    const id = itemE.getAttribute('data-id');
     console.log('Clicked element action:', action);
+
+//     const amountE = li.querySelector('input[data-role="adjustAmount"]');
+//     if (!amountE) ;
+//     const n = Number(input.value);
+//   if (!Number.isFinite(Number()) ||  < 0) return 0;
+//   return n;
 
     switch (action) {
         case "delete": {
@@ -354,13 +363,12 @@ document.getElementById('ingredientsList').addEventListener('click', function(ev
         }
         case "setExpiry": {
             const item = ingredients.find((x) => x.id === id);
-            if (!item) return;
-
+            if (!item) return
             openSetExpiryModal(item);
             break;
         }
         case "useAmount": {
-            const useId = id;
+            // updateIngredientStock(id, { deltaQty: +amount });
             break;
         }
     }
@@ -471,8 +479,8 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
     const currentMood = localStorage.getItem(MOOD_VAL_KEY);
 
     const selectedDifficulties = [...document.querySelectorAll('#difficultyGroup .selector-btn.active')].map(b => b.dataset.value);
-    if (selectedMeals.length === 0) {
-        alert('Please select a meal time.');
+    if (selectedDifficulties.length === 0) {
+        alert('Please select at least 1 difficulty level.');
         return;
     }
 
@@ -492,10 +500,9 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
 
     const expiryFirst = document.getElementById('expiryFirst').checked;
     const moodSuggest = document.getElementById('moodSuggest').checked;
-
+    console.log('Analyse clicked with filters - Meal:', selectedMeals, 'Difficulty:', selectedDifficulties, 'Expiry first:', expiryFirst, 'Mood suggest:', moodSuggest, 'Current mood:', currentMood);
     let moodIngredientSet = new Set();
     if (moodSuggest) {
-        
         if (!currentMood) {
             alert('Please select your mood first.');
             openMoodModal();
@@ -505,7 +512,6 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
             alert('Mood data is not available right now.');
             return;
         }
-
         const moodProfile = new moodING(currentMood);
         const moodIngredients = Array.isArray(moodProfile.ingredients) ? moodProfile.ingredients : [];
         moodIngredientSet = new Set(
@@ -513,23 +519,23 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
                 .map(ing => pluralize.singular(String(ing).trim().toLowerCase()))
                 .filter(Boolean)
         );
+        console.log('Mood profile for', currentMood, 'has ingredients:', moodIngredients);
     }
 
-  // Build a lookup: ingredient name (lowercase) → days left
-  const expiryMap = {};
-  for (const ing of ingredients) {
-    expiryMap[ing.name.toLowerCase()] = ing.expiry ? daysleft(ing.expiry) : Infinity;
-  }
+    // Build a lookup: ingredient name (lowercase) → days left
+    const expiryMap = {};
+    for (const ing of ingredients) {
+        expiryMap[ing.name.toLowerCase()] = ing.expiry ? daysleft(ing.expiry) : Infinity;
+    }
 
     let results = filtered.map(r => {
         const formatIngs = (r.ingredients || '').split(",").map(s => pluralize.singular(s.trim().toLowerCase())).filter(Boolean);
-        console.log('Checking recipe:', r.recipeName, 'with ingredients', formatIngs);
         const matched = formatIngs.filter(ri => matchingIngs.some(p => ri.includes(p)));
         const matchRatio = formatIngs.length > 0 ? matched.length / formatIngs.length : 0;
-        const moodMatched = moodSuggest ? formatIngs.find(ri => moodIngredientSet.has(ri)) : true;
-
-        console.log('Matched ingredients:', matched, 'Match ratio:', matchRatio, 'Mood matched:', moodMatched);
-    // Urgency: minimum days-left among matched ingredients (lower = more urgent)
+        const moodList = [...moodIngredientSet];
+        const moodMatchedList = moodList.filter(ri => formatIngs.some(p => ri.includes(p)));
+        const moodMatched = (moodMatchedList.length > 0);
+        // Urgency: minimum days-left among matched ingredients (lower = more urgent)
         const urgencyScore = matched.length > 0
         ? Math.min(...matched.map(ri => {
             const key = Object.keys(expiryMap).find(p => ri.includes(p));
@@ -539,15 +545,11 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
         return { ...r, matched, formatIngs, matchRatio, urgencyScore, moodMatched };
     });
 
-    if (moodSuggest) {
-        results = results.filter(r => r.moodMatched);
-    }
-
-    if (moodSuggest && expiryFirst) {
-        results = results.filter(r => r.moodMatched);
+    if (moodSuggest && moodSuggest !== 'na' && expiryFirst) {
+        results = results.filter(r => !r.moodMatched);
         results.sort((a, b) => a.urgencyScore - b.urgencyScore || b.matchRatio - a.matchRatio);
-    } else if (moodSuggest) {
-        results = results.filter(r => r.moodMatched);
+    } else if (moodSuggest && moodSuggest !== 'na') {
+        results = results.filter(r => !r.moodMatched);
         results.sort((a, b) => b.matchRatio - a.matchRatio || Math.random() - 0.5);
     } else if (expiryFirst) {
         results.sort((a, b) => a.urgencyScore - b.urgencyScore || b.matchRatio - a.matchRatio);
@@ -555,7 +557,7 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
         results.sort((a, b) => b.matchRatio - a.matchRatio || Math.random() - 0.5);
     }
 
-  let html = `<h3 class="results-heading">Showing top 10 suggested recipe(s) of ${results.length} found  recipe(s)</h3>`;
+  let html = `<h3 class="results-heading">Showing top ${Math.min(10, results.length)} suggested recipe(s) of ${results.length} found  recipe(s)</h3>`;
   if (results.length === 0) {
     html += `<p class="no-results">No recipes found for the selected filters.</p>`;
   }
