@@ -510,13 +510,9 @@ dialog::backdrop {
   opacity: 0.85;
 }
 
-.right-card .form {
-  width: 100%;
-}
-
 .selector-btn,
 .selector-dropdown,
-.expiry-first-label {
+.checkbox-btn {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -571,11 +567,11 @@ dialog::backdrop {
   color: #0e1a12;
 }
 
-.expiry-first-label:hover {
+.checkbox-btn:hover {
   background: #d8f3e5;
   border-color: var(--accent-soft);
 }
-.expiry-first-label input[type="checkbox"] {
+.checkbox-btn input[type="checkbox"] {
   width: 16px;
   height: 16px;
   accent-color: var(--accent);
