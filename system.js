@@ -3,7 +3,7 @@ var pluralize = typeof require === "function" ? require("pluralize") : window.pl
 //Data handeling
 const IMG_STORAGE_KEY = "recipeApp.ingredients";
 const RECIPE_STORAGE_KEY = "recipeApp.recipes";
-const recipeCSV = 'recipes.csv';
+const recipeCSV = 'recipesv3.csv';
 
 
 function loadMainScript() {
