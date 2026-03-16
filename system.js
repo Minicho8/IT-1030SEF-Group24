@@ -71,7 +71,7 @@ function loadIngredientsFromStorage() {
 }
 
 function saveIngredientsToStorage(list) {
-  localStorage.setItem(IMG_STORAGE_KEY, JSON.stringify(list));
+    localStorage.setItem(IMG_STORAGE_KEY, JSON.stringify(list));
 }
 
 let ingredients = loadIngredientsFromStorage();
@@ -569,8 +569,8 @@ document.getElementById('moodForm').addEventListener('submit', function (e) {
 });
 
 const lastDate = localStorage.getItem(MOOD_DATE_KEY);
-if (lastDate !== today) moodModal.open();
-
+if (lastDate !== today && localStorage.getItem(MOOD_VAL_KEY)) window.location.replace('/'); // Force mood reset on new day
+if (!localStorage.getItem(MOOD_VAL_KEY)) {moodModal.open();};
 document.getElementById('changeMoodBtn').addEventListener('click', moodModal.open);
 
 // RIGHT PANEL Initial and AddEventListener
