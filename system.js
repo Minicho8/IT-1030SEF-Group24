@@ -226,6 +226,7 @@ function updateIngredientsView() {
     });
     return sortIngredients(filtered, document.getElementById('sortBy').value);
 }
+
 //check if reset button should be shown
 function checkResetBtn() {
     const changed =
@@ -369,6 +370,8 @@ function buildView(view) {
                 </li>`;
             }
             document.getElementById("ingredientsList").innerHTML = viewlist;
+            document.getElementById("countTotal").textContent = String(ingredients.length);
+            document.getElementById("countExpiring").textContent = String(ingredients.filter(i => i.expiry && daysleft(i.expiry) <= 7).length);
             break;
             
         case 'right':
