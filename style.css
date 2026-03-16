@@ -39,6 +39,28 @@ header {
     text-align: center;
     font-family: var(--font-sans);
     font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0 16px;
+}
+
+.change-mood-btn {
+    position: absolute;
+    right: 16px;
+    border: 1px solid rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border-radius: 50px;
+    padding: 6px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: background 0.15s;
+}
+.change-mood-btn:hover {
+    background: rgba(255,255,255,0.25);
 }
 
 .dashboard-page {
@@ -139,6 +161,30 @@ header {
 }
 
 
+.summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    padding: 2px 4px;
+}
+
+.reset-filters-btn {
+    margin-left: auto;
+    border: 1px solid rgba(239, 68, 68, 0.45);
+    background: rgba(239, 68, 68, 0.08);
+    color: rgb(180, 30, 30);
+    border-radius: 50px;
+    padding: 3px 12px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.reset-filters-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
 .list-container{
     flex: 1;
     min-height: 0;
@@ -207,7 +253,7 @@ header {
     top: 0;
 }
 
-.ingredient-delete {
+.red-btn {
     border: 1px solid rgb(171, 0, 0);
     background: rgba(255, 0, 0, 0.1);
     border-radius: 50px;
@@ -215,13 +261,13 @@ header {
     font-size: 11px;
     cursor: pointer;
 }
-.ingredient-delete:hover {
+.red-btn:hover {
     border: 1px solid rgb(171, 0, 0);
     background: rgba(255, 0, 0, 0.25);
 }
 
 .stock-btn {
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(108, 108, 108, 0.5);
     background: none;
     border-radius: 50px;
     padding: 4px 14px;
@@ -237,7 +283,7 @@ header {
 .stock-controls {
   margin-top: 10px;
   display: grid;
-  grid-template-columns: auto 1fr auto auto auto auto;
+  grid-template-columns: 10fr 10fr 13fr 20fr 20fr;
   gap: 8px;
   align-items: center;
 }
@@ -263,14 +309,82 @@ header {
     opacity: 0.8;
     padding-right: 4px;
 }
+/* Modals */ 
 
-#ingredientModal {
-    border-radius: 5px;
-    background-color: #f2f2f2;
-    padding: 20px;
+dialog {
+    border: none;
+    border-radius: 20px;
+    padding: 28px 32px;
+    background: #f4faf7;
+    box-shadow: 0 20px 50px rgba(30,60,50,0.22);
+    max-width: 480px;
+    width: 90vw;
+}
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(3px);
+}
+/* ===== Mood Modal ===== */
+
+#moodQuestion {
+    text-align: center;
+    font-family: var(--font-sans);
+    color: var(--text-dark);
+    margin: 0 0 20px;
+    font-size: 20px;
+}
+.mood-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.mood-label {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    cursor: pointer;
+}
+.mood-label input[type="radio"] {
+    opacity: 0;
+    position: absolute;
+    width: 0;
+}
+.mood-label span {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 2px solid #cde8d8;
+    background: #fff;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--text-dark);
+    transition: background 0.15s, border-color 0.15s;
+    user-select: none;
+    gap: 8px;
+}
+.mood-label span:hover {
+    background: #d8f3e5;
+    border-color: var(--accent-soft);
+}
+.mood-label input[type="radio"]:checked + span {
+    background: #79b87c;
+    border-color: var(--accent);
+    color: #0e1a12;
+    font-weight: 600;
 }
 
-#ingredientModal input,#ingredientModal select {
+/* ===== Ingredient Modal ===== */
+
+.expiry-target {
+  margin: 0 0 10px;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+#ingredientModal input,#ingredientModal select,#setExpiryModal input {
   width: 100%;
   padding: 4px 10px;
   margin: 8px 0;
@@ -335,6 +449,8 @@ header {
   display: none;
 }
 
+
+
 .right-title {
   width: 100%;
   text-align: left;
@@ -394,34 +510,55 @@ header {
   opacity: 0.85;
 }
 
+.right-card .form {
+  width: 100%;
+}
+
+.selector-btn,
+.selector-dropdown,
+.expiry-first-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  max-width: 560px;
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 2px solid #cde8d8;
+  background: #fff;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-dark);
+  transition: background 0.15s, border-color 0.15s;
+  box-sizing: border-box;
+}
+
 .selector-stack {
   width: 100%;
-  max-width: 460px;
+  max-width: 560px;
   display: grid;
   gap: 12px;
 }
 
-/* pill buttons */
-.selector-btn {
-    width: 100%;
-    border: 0;
-    border-radius: 999px;
-    padding: 14px 18px;
-    cursor: pointer;
+/* Dropdown selects replacing pill buttons */
+.selector-dropdown {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23333' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+  padding-right: 42px;
+  transition: filter 0.15s ease, box-shadow 0.15s ease;
+  outline: none;
+}
 
-    background: #d9d9d9;
-    color: #111;
-
-    font-family: "Comic Sans MS", "Segoe Print", "Bradley Hand", cursive;
-    font-size: 14px;
-    line-height: 1;
-    letter-spacing: 0.5px;
-
-    box-shadow:
-        0 10px 18px rgba(0,0,0,0.10),
-        inset 0 1px 0 rgba(255,255,255,0.65);
-
-    transition: transform 0.08s ease, filter 0.15s ease, background 0.2s ease;
+.selector-dropdown:hover,
+.selector-dropdown:focus {
+  filter: brightness(0.97);
+  box-shadow:
+      0 12px 22px rgba(0,0,0,0.13),
+      inset 0 1px 0 rgba(255,255,255,0.65);
 }
 
 .selector-btn:hover {
@@ -432,6 +569,17 @@ header {
 .selector-btn.active {
   background: #79b87c;
   color: #0e1a12;
+}
+
+.expiry-first-label:hover {
+  background: #d8f3e5;
+  border-color: var(--accent-soft);
+}
+.expiry-first-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--accent);
+  flex-shrink: 0;
 }
 
 /* analyse button */
@@ -450,7 +598,7 @@ header {
     color: #fff;
 
     box-shadow: 0 18px 30px rgba(0,0,0,0.18);
-    }
+}
 
 .analyse-btn:hover {
   filter: brightness(1.05);
@@ -469,9 +617,59 @@ header {
   margin-top: 16px;
   text-align: left;
 }
+
+/* Ingredient chips inside recipe cards */
+.ing-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+.ing-chip {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  border: 1px solid;
+}
+.ing-chip-ok {
+  background: rgba(34, 197, 94, 0.12);
+  border-color: rgba(34, 197, 94, 0.45);
+  color: #166534;
+}
+.ing-chip-missing {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.45);
+  color: #991b1b;
+  text-decoration: line-through;
+  font-style: italic;
+}
+.analyse-again-btn {
+  width: 100%;
+  max-width: 720px;
+  margin-bottom: 16px;
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  padding: 11px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  background: #fff;
+  color: var(--accent);
+  font-family: var(--font-sans);
+  transition: background 0.15s, color 0.15s;
+}
+.analyse-again-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
 .recipe-img {
   width: 100px;
   height: 100px;
   border-radius: 12px;
   margin-top: 12px;
+  object-fit: contain;
 }
