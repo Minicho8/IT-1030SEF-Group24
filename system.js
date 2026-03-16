@@ -119,10 +119,9 @@ function addNewIngredient(data) {
     name: data.name.trim()[0].toUpperCase() + data.name.trim().slice(1).toLowerCase(),
     category: data.category,
     qty: Number(data.qty),
-    unit: data.unit,
+    unit: String("Servings"),
     expiry: data.expiry || "",
-    minQty: Number(3),
-    //minQty: Number(data.minQty ?? 1),
+    minQty: Number(3)
   };
   ingredients = [item, ...ingredients];
   saveIngredientsToStorage(ingredients);
@@ -162,21 +161,17 @@ function updateIngredientExpiry(id, expiry) {
         buildView('left');
 }
 
-function updateIngredientStock(id, { deltaQty, setQty } = {}) {
-  ingredients = ingredients.map((x) => {
-    if (x.id !== id) return x;
+function updateIngredientStock(id, use) {
+    ingredients = ingredients.map((x) => {
+        if (x.id !== id) return x;
+        const current = Number(x.qty);
+        const next = current - Number(use);
+        return { ...x, qty: next };
+    });
+    ingredients = ingredients.filter(x => x.qty > 0);
 
-    const current = Number(x.qty);
-    const next =
-      typeof setQty === "number"
-        ? clampToZero(setQty)
-        : clampToZero(current + Number(deltaQty || 0));
-
-    return { ...x, qty: next };
-  });
-
-  saveIngredientsToStorage(ingredients);
-  buildView('left');
+    saveIngredientsToStorage(ingredients);
+    buildView('left');
 }
 
 function openSetExpiryModal(item) {
@@ -344,16 +339,12 @@ document.getElementById('ingredientsList').addEventListener('click', function(ev
     if (!element) return;
 
     const action = element.getAttribute('data-action');
-    const itemE = element.closest('li[data-id]');
-    if (!itemE) return;
-    const id = itemE.getAttribute('data-id');
+    const item = element.closest('li[data-id]');
+    if (!item) return;
+    const id = item.getAttribute('data-id');
     console.log('Clicked element action:', action);
 
-//     const amountE = li.querySelector('input[data-role="adjustAmount"]');
-//     if (!amountE) ;
-//     const n = Number(input.value);
-//   if (!Number.isFinite(Number()) ||  < 0) return 0;
-//   return n;
+    
 
     switch (action) {
         case "delete": {
@@ -368,7 +359,9 @@ document.getElementById('ingredientsList').addEventListener('click', function(ev
             break;
         }
         case "useAmount": {
-            // updateIngredientStock(id, { deltaQty: +amount });
+            const amount = item.querySelector('input[data-role="adjustAmount"]').value;
+            updateIngredientStock(id,amount);
+            
             break;
         }
     }
@@ -500,7 +493,6 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
 
     const expiryFirst = document.getElementById('expiryFirst').checked;
     const moodSuggest = document.getElementById('moodSuggest').checked;
-    console.log('Analyse clicked with filters - Meal:', selectedMeals, 'Difficulty:', selectedDifficulties, 'Expiry first:', expiryFirst, 'Mood suggest:', moodSuggest, 'Current mood:', currentMood);
     let moodIngredientSet = new Set();
     if (moodSuggest) {
         if (!currentMood) {
@@ -519,7 +511,6 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
                 .map(ing => pluralize.singular(String(ing).trim().toLowerCase()))
                 .filter(Boolean)
         );
-        console.log('Mood profile for', currentMood, 'has ingredients:', moodIngredients);
     }
 
     // Build a lookup: ingredient name (lowercase) → days left
