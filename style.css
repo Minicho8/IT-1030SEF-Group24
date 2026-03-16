@@ -324,6 +324,7 @@ dialog::backdrop {
     background: rgba(0, 0, 0, 0.45);
     backdrop-filter: blur(3px);
 }
+
 /* ===== Mood Modal ===== */
 
 #moodQuestion {
@@ -365,16 +366,43 @@ dialog::backdrop {
     user-select: none;
     gap: 8px;
 }
+
 .mood-label span:hover {
+    transform: scale(1.05);
     background: #d8f3e5;
     border-color: var(--accent-soft);
 }
+
+
 .mood-label input[type="radio"]:checked + span {
     background: #79b87c;
     border-color: var(--accent);
     color: #0e1a12;
     font-weight: 600;
 }
+
+.mood-modalActions {
+    position: absolute;
+    width: 465px;
+    border: 2px solid #cde8d8;
+    background: #fff;
+    border-radius: 50px;
+    padding: 10px 14px;
+    font-size: 15px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+
+    /*
+    transition: transform 0.08s ease, filter 0.15s ease, background 0.2s ease;
+    */
+}
+
+.mood-modalActions span:hover {
+    transform: scale(1.05);
+    background: #d8f3e5;
+    border-color: var(--accent-soft);
+}
+
 
 /* ===== Ingredient Modal ===== */
 
