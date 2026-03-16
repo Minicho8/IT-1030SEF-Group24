@@ -283,7 +283,7 @@ header {
 .stock-controls {
   margin-top: 10px;
   display: grid;
-  grid-template-columns: 10fr 10fr 13fr 20fr 20fr;
+  grid-template-columns: 10fr 10fr 13fr 13fr 20fr;
   gap: 8px;
   align-items: center;
 }
@@ -439,7 +439,6 @@ dialog::backdrop {
   align-items: center;
   text-align: center;
   padding: 20px 18px 26px;
-  overflow: auto;
 }
 
 /* If your page already has a centered "Right Dashboard" somewhere,
@@ -449,15 +448,35 @@ dialog::backdrop {
   display: none;
 }
 
+.results-heading {
+  margin: 0;
+}
 
+.right-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 4px 0 14px;
+}
 
 .right-title {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   text-align: left;
-  margin: 6px 0 10px;
-  font-size: 22px;
-  font-weight: 650;
+  margin: 0;
+  font-size: 1.17em;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   color: var(--text-dark);
+}
+
+.right-title-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
 }
 
 .right-placeholder {
@@ -473,20 +492,38 @@ dialog::backdrop {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
-  padding: 6px 0 0;
+  gap: 16px;
+  padding: 8px 0 0;
+  overflow: auto;
+  scrollbar-width: thin;
 }
+
+.right-controls .form {
+  width: 100%;
+  max-width: 620px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0px 18px;
+  box-sizing: border-box;
+  animation: form-enter 0.3s ease-out;
+}
+
+
 
 .group-block {
   width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
+  align-items: stretch;
+  gap: 8px;
 }
 
 .group-hint {
-  font-size: 18px;
+  width: 100%;
+  text-align: left;
+  font-size: 16px;
+  line-height: 1.3;
   color: var(--text-dark);
   font-weight: 600;
 }
@@ -534,7 +571,7 @@ dialog::backdrop {
   width: 100%;
   max-width: 560px;
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 /* Dropdown selects replacing pill buttons */
@@ -560,6 +597,14 @@ dialog::backdrop {
 .selector-btn:hover {
   filter: brightness(0.98);
   transform: translateY(-1px);
+}
+
+.selector-btn:focus-visible,
+.selector-dropdown:focus-visible,
+.checkbox-btn:focus-within {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.18);
 }
 
 .selector-btn.active {
@@ -598,6 +643,13 @@ dialog::backdrop {
 
 .analyse-btn:hover {
   filter: brightness(1.05);
+}
+
+.analyse-btn:focus-visible {
+  outline: none;
+  box-shadow:
+      0 18px 30px rgba(0,0,0,0.18),
+      0 0 0 3px rgba(46, 139, 87, 0.2);
 }
 
 .analyse-help {
@@ -643,19 +695,21 @@ dialog::backdrop {
   font-style: italic;
 }
 .analyse-again-btn {
-  width: 100%;
-  max-width: 720px;
-  margin-bottom: 16px;
+  width: auto;
+  max-width: none;
+  margin: 0;
   border: 2px solid var(--accent);
   border-radius: 999px;
-  padding: 11px 20px;
-  font-size: 15px;
+  padding: 10px 16px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   background: #fff;
   color: var(--accent);
+  box-shadow: 0 10px 24px rgba(28, 55, 45, 0.12);
   font-family: var(--font-sans);
   transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
 }
 .analyse-again-btn:hover {
   background: var(--accent);
@@ -668,4 +722,50 @@ dialog::backdrop {
   border-radius: 12px;
   margin-top: 12px;
   object-fit: contain;
+}
+
+@media screen and (max-width: 850px) {
+  .dashboard-right {
+    padding: 12px;
+  }
+
+  .right-card {
+    padding: 18px 14px 22px;
+    border-radius: 24px;
+  }
+
+  .right-title {
+    margin: 2px 0 12px;
+  }
+
+  .right-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .right-title-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .right-controls .form {
+    padding: 18px 14px;
+  }
+
+  .selector-btn,
+  .selector-dropdown,
+  .checkbox-btn {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .group-hint {
+    font-size: 15px;
+  }
+
+  .analyse-btn {
+    font-size: 16px;
+    padding: 14px 16px;
+  }
 }
