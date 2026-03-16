@@ -71,7 +71,7 @@ function loadIngredientsFromStorage() {
 }
 
 function saveIngredientsToStorage(list) {
-  localStorage.setItem(IMG_STORAGE_KEY, JSON.stringify(list));
+    localStorage.setItem(IMG_STORAGE_KEY, JSON.stringify(list));
 }
 
 let ingredients = loadIngredientsFromStorage();
@@ -392,12 +392,6 @@ function buildView(view) {
                     <div class="recipe-meta">
                         ${r.source || 'Internet'} · ${r.cuisine || 'Unknown'} Cuisine · Difficulty: ${r.difficulty == '0' ? 'Easy' : r.difficulty === '1' ? 'Normal' : 'Hard'}
                     </div>
-                    <div class="recipe-match">
-                        <div class="match-bar">
-                        <div class="match-fill" style="width:${pct}%"></div>
-                        </div>
-                        <span class="match-pct">${pct}% match (${r.matched.length}/${r.formatIngs.length})</span>
-                    </div>
                     <div class="ing-chips">
                         ${r.formatIngs.sort((a,b) => a.localeCompare(b)).map(ing => {
                         const isMatched = r.matched.includes(ing);
@@ -575,8 +569,8 @@ document.getElementById('moodForm').addEventListener('submit', function (e) {
 });
 
 const lastDate = localStorage.getItem(MOOD_DATE_KEY);
-if (lastDate !== today) moodModal.open();
-
+if (lastDate !== today && localStorage.getItem(MOOD_VAL_KEY)) window.location.replace('/'); // Force mood reset on new day
+if (!localStorage.getItem(MOOD_VAL_KEY)) {moodModal.open();};
 document.getElementById('changeMoodBtn').addEventListener('click', moodModal.open);
 
 // RIGHT PANEL Initial and AddEventListener
