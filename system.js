@@ -458,14 +458,19 @@ document.getElementById('changeMoodBtn').addEventListener('click', openMoodModal
 
 // ===== RIGHT PANEL: Meal & Difficulty Selector + Analyse =====
 
+document.getElementById('difficultyGroup').addEventListener('click', function (e) {
+  const btn = e.target.closest('.selector-btn');
+  if (!btn) return;
+  btn.classList.toggle('active');
+});
+
+
 document.getElementById('analyseBtn').addEventListener('click', function () {
     const mealValue = document.getElementById('mealGroup').value;
     const selectedMeals = mealValue ? [mealValue] : [];
+    const currentMood = localStorage.getItem(MOOD_VAL_KEY);
 
-    const difficultyLevel = parseInt(document.getElementById('difficultyGroup').value, 10);
-    // Cascade: level N includes all levels 0..N
-    const selectedDifficulties = Array.from({ length: difficultyLevel + 1 }, (_, i) => String(i));
-
+    const selectedDifficulties = [...document.querySelectorAll('#difficultyGroup .selector-btn.active')].map(b => b.dataset.value);
     if (selectedMeals.length === 0) {
         alert('Please select a meal time.');
         return;
@@ -485,7 +490,30 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
         return mealMatch && diffMatch;
     });
 
-  const expiryFirst = document.getElementById('expiryFirst').checked;
+    const expiryFirst = document.getElementById('expiryFirst').checked;
+    const moodSuggest = document.getElementById('moodSuggest').checked;
+
+    let moodIngredientSet = new Set();
+    if (moodSuggest) {
+        
+        if (!currentMood) {
+            alert('Please select your mood first.');
+            openMoodModal();
+            return;
+        }
+        if (typeof moodING !== 'function') {
+            alert('Mood data is not available right now.');
+            return;
+        }
+
+        const moodProfile = new moodING(currentMood);
+        const moodIngredients = Array.isArray(moodProfile.ingredients) ? moodProfile.ingredients : [];
+        moodIngredientSet = new Set(
+            moodIngredients
+                .map(ing => pluralize.singular(String(ing).trim().toLowerCase()))
+                .filter(Boolean)
+        );
+    }
 
   // Build a lookup: ingredient name (lowercase) → days left
   const expiryMap = {};
@@ -493,31 +521,39 @@ document.getElementById('analyseBtn').addEventListener('click', function () {
     expiryMap[ing.name.toLowerCase()] = ing.expiry ? daysleft(ing.expiry) : Infinity;
   }
 
-  const results = filtered.map(r => {
-    const formatIngs = (r.ingredients || '')
-      .split(",")
-      .map(s => pluralize.singular(s.trim().toLowerCase()))
-      .filter(Boolean);
-    console.log('Checking recipe:', r.recipeName, 'with ingredients', formatIngs);
-    const matched = formatIngs.filter(ri =>
-      matchingIngs.some(p => ri.includes(p))
-    );
-    const matchRatio = formatIngs.length > 0 ? matched.length / formatIngs.length : 0;
-    // Urgency: minimum days-left among matched ingredients (lower = more urgent)
-    const urgencyScore = matched.length > 0
-      ? Math.min(...matched.map(ri => {
-          const key = Object.keys(expiryMap).find(p => ri.includes(p));
-          return key !== undefined ? expiryMap[key] : Infinity;
-        }))
-      : Infinity;
-    return { ...r, matched, formatIngs, matchRatio, urgencyScore };
-  });
+    let results = filtered.map(r => {
+        const formatIngs = (r.ingredients || '').split(",").map(s => pluralize.singular(s.trim().toLowerCase())).filter(Boolean);
+        console.log('Checking recipe:', r.recipeName, 'with ingredients', formatIngs);
+        const matched = formatIngs.filter(ri => matchingIngs.some(p => ri.includes(p)));
+        const matchRatio = formatIngs.length > 0 ? matched.length / formatIngs.length : 0;
+        const moodMatched = moodSuggest ? formatIngs.find(ri => moodIngredientSet.has(ri)) : true;
 
-  if (expiryFirst) {
-    results.sort((a, b) => a.urgencyScore - b.urgencyScore || b.matchRatio - a.matchRatio);
-  } else {
-    results.sort((a, b) => b.matchRatio - a.matchRatio || Math.random() - 0.5);
-  }
+        console.log('Matched ingredients:', matched, 'Match ratio:', matchRatio, 'Mood matched:', moodMatched);
+    // Urgency: minimum days-left among matched ingredients (lower = more urgent)
+        const urgencyScore = matched.length > 0
+        ? Math.min(...matched.map(ri => {
+            const key = Object.keys(expiryMap).find(p => ri.includes(p));
+            return key !== undefined ? expiryMap[key] : Infinity;
+            }))
+        : Infinity;
+        return { ...r, matched, formatIngs, matchRatio, urgencyScore, moodMatched };
+    });
+
+    if (moodSuggest) {
+        results = results.filter(r => r.moodMatched);
+    }
+
+    if (moodSuggest && expiryFirst) {
+        results = results.filter(r => r.moodMatched);
+        results.sort((a, b) => a.urgencyScore - b.urgencyScore || b.matchRatio - a.matchRatio);
+    } else if (moodSuggest) {
+        results = results.filter(r => r.moodMatched);
+        results.sort((a, b) => b.matchRatio - a.matchRatio || Math.random() - 0.5);
+    } else if (expiryFirst) {
+        results.sort((a, b) => a.urgencyScore - b.urgencyScore || b.matchRatio - a.matchRatio);
+    } else {
+        results.sort((a, b) => b.matchRatio - a.matchRatio || Math.random() - 0.5);
+    }
 
   let html = `<h3 class="results-heading">Showing top 10 suggested recipe(s) of ${results.length} found  recipe(s)</h3>`;
   if (results.length === 0) {
