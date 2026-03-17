@@ -381,26 +381,13 @@ dialog::backdrop {
     font-weight: 600;
 }
 
-.mood-modalActions {
-    position: absolute;
-    width: 465px;
-    border: 2px solid #cde8d8;
-    background: #fff;
-    border-radius: 50px;
+.mood-modalActions{
+    width: 480px;
     padding: 10px 14px;
-    font-size: 15px;
+    border-radius: 999px;
+    border: 2px solid #79b87c;
+    background: #cde8d8;
     cursor: pointer;
-    font-family: var(--font-sans);
-
-    /*
-    transition: transform 0.08s ease, filter 0.15s ease, background 0.2s ease;
-    */
-}
-
-.mood-modalActions span:hover {
-    transform: scale(1.05);
-    background: #d8f3e5;
-    border-color: var(--accent-soft);
 }
 
 
