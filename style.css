@@ -1,12 +1,12 @@
-/*overall theme control*/
+/* ===== overall theme control ===== */
 :root {
     --bg-gradient: radial-gradient(circle at 20% 30%, #f4faf7, #eaf3ef);
     --card-white: rgba(255,255,255,0.88);
     --glass-edge: rgba(255,255,255,0.6);
-    --primary: #1E3A2F;        /* deep forest green */
+    --primary: #1E3A2F;
     --primary-soft: #2C5F4B;
-    --accent: #2E8B57;         /* sea green – fresh, award-friendly */
-    --accent-soft: #3CB371;    /* medium sea green */
+    --accent: #2E8B57;
+    --accent-soft: #3CB371;
     --accent-glow: rgba(46,139,86,0.18);
     --success-mint: #4CAF50;
     --text-dark: #1C2E2A;
@@ -27,10 +27,10 @@ body {
 }
 
 body {
-	min-height: 100vh;
-	margin: 0;
-	display: flex;
-	flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 header {
@@ -64,20 +64,21 @@ header {
 }
 
 .dashboard-page {
-	min-width: 320px;
-	flex: 1;
+    min-width: 320px;
+    flex: 1;
     display: flex;
     min-height: 0;
 }
 
 .dashboard {
-	display: flex;
-	width: 100%;
-	flex: 1;
+    display: flex;
+    width: 100%;
+    flex: 1;
     flex-wrap: nowrap;
     overflow: hidden;
     min-height: 0;
 }
+
 .card {
     background: rgba(255,255,255,0.88);
     backdrop-filter: blur(16px);
@@ -122,12 +123,13 @@ header {
     overflow: hidden;
     transition: opacity 0.25s ease, max-height 0.3s ease, transform 0.3s ease, margin 0.3s ease;
 }
-.top-left-btn{
-    position:absolute; 
-    right: 1em; 
+
+.top-left-btn {
+    position: absolute;
+    right: 1em;
     top: 1em;
 }
-.top-left-btn button{
+.top-left-btn button {
     border: 1px solid rgba(255, 255, 255, 0.12);
     background: none;
     border-radius: 50px;
@@ -137,8 +139,9 @@ header {
 }
 .top-left-btn button:hover {
     background: var(--accent-glow);
-    border-color:#1C2E2A;
+    border-color: #1C2E2A;
 }
+
 .search-bar {
     display: flex;
     align-items: center;
@@ -159,7 +162,6 @@ header {
     flex: 1;
     padding-left: 0.5rem;
 }
-
 
 .summary {
     display: flex;
@@ -185,7 +187,7 @@ header {
     background: rgba(239, 68, 68, 0.2);
 }
 
-.list-container{
+.list-container {
     flex: 1;
     min-height: 0;
     overflow: auto;
@@ -194,11 +196,11 @@ header {
 }
 
 .ingredientsList {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 8px;
 }
 
 .ingredient {
@@ -213,21 +215,22 @@ header {
     align-items: center;
 }
 .ingredient-title {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  min-width: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    min-width: 0;
 }
 .ingredient-name {
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .ingredient-subtitle {
-  font-size: 12px;
-  opacity: 0.8;
+    font-size: 12px;
+    opacity: 0.8;
 }
+
 .tag {
     border: 1px solid;
     border-radius: 50px;
@@ -235,21 +238,21 @@ header {
     font-size: 11px;
 }
 .tag-y {
-  border-color: rgba(245, 158, 11, 0.45);
-  background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.45);
+    background: rgba(245, 158, 11, 0.12);
 }
 .tag-r {
-  border-color: rgba(239, 68, 68, 0.45);
-  background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.45);
+    background: rgba(239, 68, 68, 0.12);
 }
 .tag-g {
-  border-color: rgba(34, 197, 94, 0.45);
-  background: rgba(34, 197, 94, 0.12);
+    border-color: rgba(34, 197, 94, 0.45);
+    background: rgba(34, 197, 94, 0.12);
 }
 
 .ingredient-actions {
-    position:relative; 
-    right: 0; 
+    position: relative;
+    right: 0;
     top: 0;
 }
 
@@ -267,7 +270,7 @@ header {
 }
 
 .stock-btn {
-  border: 1px solid rgba(108, 108, 108, 0.5);
+    border: 1px solid rgba(108, 108, 108, 0.5);
     background: none;
     border-radius: 50px;
     padding: 4px 14px;
@@ -276,32 +279,31 @@ header {
 }
 .stock-btn:hover {
     background: var(--accent-glow);
-    border-color:#1C2E2A;
+    border-color: #1C2E2A;
 }
 
-/* Stock adjust controls */
 .stock-controls {
-  margin-top: 10px;
-  display: grid;
-  grid-template-columns: 10fr 10fr 13fr 13fr 20fr;
-  gap: 8px;
-  align-items: center;
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 10fr 10fr 13fr 13fr 20fr;
+    gap: 8px;
+    align-items: center;
 }
 
 .stock-label {
-  font-size: 12px;
-  opacity: 0.85;
+    font-size: 12px;
+    opacity: 0.85;
 }
 
 .stock-input {
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
-  color: inherit;
-  outline: none;
-  width: 100%;
-  min-width: 50px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: inherit;
+    outline: none;
+    width: 100%;
+    min-width: 50px;
 }
 
 .stock-unit {
@@ -309,7 +311,8 @@ header {
     opacity: 0.8;
     padding-right: 4px;
 }
-/* Modals */ 
+
+/* ===== Modals ===== */
 
 dialog {
     border: none;
@@ -324,6 +327,7 @@ dialog::backdrop {
     background: rgba(0, 0, 0, 0.45);
     backdrop-filter: blur(3px);
 }
+
 /* ===== Mood Modal ===== */
 
 #moodQuestion {
@@ -366,7 +370,7 @@ dialog::backdrop {
     gap: 8px;
 }
 .mood-label span:hover {
-  transform: scale(1.05);
+    transform: scale(1.05);
     background: #d8f3e5;
     border-color: var(--accent-soft);
 }
@@ -377,7 +381,7 @@ dialog::backdrop {
     font-weight: 600;
 }
 
-.mood-modalActions{
+.mood-modalActions {
     width: 480px;
     padding: 10px 14px;
     border-radius: 999px;
@@ -386,30 +390,27 @@ dialog::backdrop {
     cursor: pointer;
 }
 
-
 /* ===== Ingredient Modal ===== */
 
 .expiry-target {
-  margin: 0 0 10px;
-  color: var(--text-light);
-  font-size: 14px;
+    margin: 0 0 10px;
+    color: var(--text-light);
+    font-size: 14px;
 }
 
-#ingredientModal input,#ingredientModal select,#setExpiryModal input {
-  width: 100%;
-  padding: 4px 10px;
-  margin: 8px 0;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
+#ingredientModal input,
+#ingredientModal select,
+#setExpiryModal input {
+    width: 100%;
+    padding: 4px 10px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
-@media screen and (max-width: 850px) {
-    .dashboard{
-        flex-direction: column;
-    }
-}
-.controls .search:not(.show):has(input:placeholder-shown),  .controls .filter:not(.show){
+.controls .search:not(.show):has(input:placeholder-shown),
+.controls .filter:not(.show) {
     opacity: 0;
     visibility: hidden;
     max-height: 0;
@@ -417,21 +418,22 @@ dialog::backdrop {
     pointer-events: none;
     margin-bottom: 0;
 }
+
 .dashboard-left,
 .dashboard-right {
-	box-sizing: border-box;
-	padding: 16px;
+    box-sizing: border-box;
+    padding: 16px;
     background-color: #c1ffdc;
     display: flex;
     min-height: 0;
 }
 
 .dashboard-left {
-	flex: 0 0 40%;
+    flex: 0 0 40%;
 }
 
 .dashboard-right {
-	flex: 0 0 60%;
+    flex: 0 0 60%;
 }
 
 .right-card {
@@ -441,200 +443,195 @@ dialog::backdrop {
     min-height: 0;
 }
 
-
-/* ===== Right Dashboard (match provided screenshot) ===== */
+/* ===== Right Dashboard ===== */
 
 .right-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 20px 18px 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px 18px 26px;
 }
 
-/* If your page already has a centered "Right Dashboard" somewhere,
-   this will prevent it from looking like a second heading. Optional. */
 .dashboard-right > h2,
 .dashboard-right > h3 {
-  display: none;
+    display: none;
 }
 
 .results-heading {
-  margin: 0;
+    margin: 0;
 }
 
 .right-header {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 4px 0 14px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 4px 0 14px;
 }
 
 .right-title {
-  flex: 1;
-  min-width: 0;
-  text-align: left;
-  margin: 0;
-  font-size: 1.17em;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  color: var(--text-dark);
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+    margin: 0;
+    font-size: 1.17em;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--text-dark);
 }
 
 .right-title-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
 }
 
 .right-placeholder {
-  width: 100%;
-  text-align: left;
-  margin: 0 0 26px;
-  color: var(--text-light);
-  font-size: 14px;
+    width: 100%;
+    text-align: left;
+    margin: 0 0 26px;
+    color: var(--text-light);
+    font-size: 14px;
 }
 
 .right-controls {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  padding: 8px 0 0;
-  overflow: auto;
-  scrollbar-width: thin;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 0 0;
+    overflow: auto;
+    scrollbar-width: thin;
 }
 
 .right-controls .form {
-  width: 100%;
-  max-width: 620px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  padding: 0px 18px;
-  box-sizing: border-box;
-  animation: form-enter 0.3s ease-out;
+    width: 100%;
+    max-width: 620px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 0px 18px;
+    box-sizing: border-box;
+    animation: form-enter 0.3s ease-out;
 }
 
-
-
 .group-block {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 8px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
 }
 
 .group-hint {
-  width: 100%;
-  text-align: left;
-  font-size: 16px;
-  line-height: 1.3;
-  color: var(--text-dark);
-  font-weight: 600;
+    width: 100%;
+    text-align: left;
+    font-size: 16px;
+    line-height: 1.3;
+    color: var(--text-dark);
+    font-weight: 600;
 }
 
 .group-hint .req {
-  color: #d33;
-  padding-left: 3px;
+    color: #d33;
+    padding-left: 3px;
 }
 
 .group-divider {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  color: var(--text-dark);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--text-dark);
 }
 
 .group-divider .dash {
-  font-family: var(--font-sans);
-  opacity: 0.85;
+    font-family: var(--font-sans);
+    opacity: 0.85;
 }
 
 .selector-btn,
 .selector-dropdown,
 .checkbox-btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-  max-width: 560px;
-  width: 100%;
-  padding: 12px 18px;
-  border-radius: 999px;
-  border: 2px solid #cde8d8;
-  background: #fff;
-  font-family: var(--font-sans);
-  font-size: 14px;
-  color: var(--text-dark);
-  transition: background 0.15s, border-color 0.15s;
-  box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    max-width: 560px;
+    width: 100%;
+    padding: 12px 18px;
+    border-radius: 999px;
+    border: 2px solid #cde8d8;
+    background: #fff;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: var(--text-dark);
+    transition: background 0.15s, border-color 0.15s;
+    box-sizing: border-box;
 }
 
 .selector-stack {
-  width: 100%;
-  max-width: 560px;
-  display: grid;
-  gap: 10px;
+    width: 100%;
+    max-width: 560px;
+    display: grid;
+    gap: 10px;
 }
 
-/* Dropdown selects replacing pill buttons */
 .selector-dropdown {
-  appearance: none;
-  -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23333' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 18px center;
-  padding-right: 42px;
-  transition: filter 0.15s ease, box-shadow 0.15s ease;
-  outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23333' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    padding-right: 42px;
+    transition: filter 0.15s ease, box-shadow 0.15s ease;
+    outline: none;
 }
 
 .selector-dropdown:hover,
 .selector-dropdown:focus {
-  filter: brightness(0.97);
-  box-shadow:
-      0 12px 22px rgba(0,0,0,0.13),
-      inset 0 1px 0 rgba(255,255,255,0.65);
+    filter: brightness(0.97);
+    box-shadow:
+        0 12px 22px rgba(0,0,0,0.13),
+        inset 0 1px 0 rgba(255,255,255,0.65);
 }
 
 .selector-btn:hover {
-  filter: brightness(0.98);
-  transform: translateY(-1px);
+    filter: brightness(0.98);
+    transform: translateY(-1px);
 }
 
 .selector-btn:focus-visible,
 .selector-dropdown:focus-visible,
 .checkbox-btn:focus-within {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.18);
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.18);
 }
 
 .selector-btn.active {
-  background: #79b87c;
-  color: #0e1a12;
+    background: #79b87c;
+    color: #0e1a12;
 }
 
 .checkbox-btn:hover {
-  background: #d8f3e5;
-  border-color: var(--accent-soft);
+    background: #d8f3e5;
+    border-color: var(--accent-soft);
 }
 .checkbox-btn input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  accent-color: var(--accent);
-  flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+    flex-shrink: 0;
 }
 
-/* analyse button */
+/* ===== Analyse Button ===== */
+
 .analyse-btn {
     width: 100%;
     max-width: 560px;
@@ -645,138 +642,249 @@ dialog::backdrop {
     font-size: 18px;
     font-weight: 650;
     cursor: pointer;
-
     background: #1f3b34;
     color: #fff;
-
     box-shadow: 0 18px 30px rgba(0,0,0,0.18);
 }
 
 .analyse-btn:hover {
-  filter: brightness(1.05);
+    filter: brightness(1.05);
 }
 
 .analyse-btn:focus-visible {
-  outline: none;
-  box-shadow:
-      0 18px 30px rgba(0,0,0,0.18),
-      0 0 0 3px rgba(46, 139, 87, 0.2);
+    outline: none;
+    box-shadow:
+        0 18px 30px rgba(0,0,0,0.18),
+        0 0 0 3px rgba(46, 139, 87, 0.2);
 }
 
 .analyse-help {
-  margin: 0;
-  max-width: 560px;
-  font-size: 13px;
-  color: #3e5a52;
+    margin: 0;
+    max-width: 560px;
+    font-size: 13px;
+    color: #3e5a52;
 }
 
 .analyse-results {
-  width: 100%;
-  max-width: 720px;
-  margin-top: 16px;
-  text-align: left;
+    width: 100%;
+    max-width: 720px;
+    margin-top: 16px;
+    text-align: left;
 }
 
-/* Ingredient chips inside recipe cards */
+/* ===== Recipe Card Green Box ===== */
+
+.recipe-card {
+    background: rgba(150, 236, 130, 0.20);
+    border: 1.5px solid rgba(46, 139, 87, 0.40);
+    border-radius: 14px;
+
+    /* ✅ 確保所有內容都被裁切在綠色框內 */
+    overflow: hidden;
+
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    margin-bottom: 12px;
+}
+
+.recipe-card:hover {
+    box-shadow: 0 6px 20px rgba(46, 139, 87, 0.18);
+    transform: translateY(-2px);
+}
+
+/* 左側圖片區域 — 佔 50% */
+.recipe-card-img-wrap {
+    flex: 0 0 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(46, 139, 87, 0.20);
+    box-sizing: border-box;
+
+    /* ✅ 防止圖片撐破框 */
+    overflow: hidden;
+    min-width: 0;
+}
+
+.recipe-card-img-wrap .recipe-img {
+    /* ✅ 確保圖片完全填滿且不溢出 */
+    width: 100%;
+    height: 130px;
+    border-radius: 0;
+    object-fit: cover;
+    display: block;
+    flex-shrink: 0;
+}
+
+/* 右側文字區域 — 佔 50% */
+.recipe-card-info {
+    flex: 0 0 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    padding: 14px 14px 14px 14px;
+    box-sizing: border-box;
+
+    /* ✅ 防止長文字溢出框外 */
+    min-width: 0;
+    overflow: hidden;
+}
+
+/* ✅ 強制所有文字子元素不超出框 */
+.recipe-card-info * {
+    max-width: 100%;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+.recipe-card-info strong {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* ===== Ingredient Chips inside Recipe Cards ===== */
+
 .ing-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+
+    /* ✅ chip 超出時換行而非溢出 */
+    overflow: hidden;
 }
 .ing-chip {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-  font-family: var(--font-sans);
-  font-weight: 500;
-  border: 1px solid;
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    border: 1px solid;
+
+    /* ✅ 確保 chip 文字不溢出 */
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .ing-chip-ok {
-  background: rgba(34, 197, 94, 0.12);
-  border-color: rgba(34, 197, 94, 0.45);
-  color: #166534;
+    background: rgba(34, 197, 94, 0.12);
+    border-color: rgba(34, 197, 94, 0.45);
+    color: #166534;
 }
 .ing-chip-missing {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.45);
-  color: #991b1b;
-  text-decoration: line-through;
-  font-style: italic;
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.45);
+    color: #991b1b;
+    text-decoration: line-through;
+    font-style: italic;
 }
+
 .analyse-again-btn {
-  width: auto;
-  max-width: none;
-  margin: 0;
-  border: 2px solid var(--accent);
-  border-radius: 999px;
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  background: #fff;
-  color: var(--accent);
-  box-shadow: 0 10px 24px rgba(28, 55, 45, 0.12);
-  font-family: var(--font-sans);
-  transition: background 0.15s, color 0.15s;
-  white-space: nowrap;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    border: 2px solid var(--accent);
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    background: #fff;
+    color: var(--accent);
+    box-shadow: 0 10px 24px rgba(28, 55, 45, 0.12);
+    font-family: var(--font-sans);
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
 }
 .analyse-again-btn:hover {
-  background: var(--accent);
-  color: #fff;
+    background: var(--accent);
+    color: #fff;
 }
 
-.recipe-img {
-  width: 100px;
-  height: 100px;
-  border-radius: 12px;
-  margin-top: 12px;
-  object-fit: contain;
-}
+/* ===== Responsive ===== */
 
 @media screen and (max-width: 850px) {
-  .dashboard-right {
-    padding: 12px;
-  }
+    .dashboard {
+        flex-direction: column;
+    }
 
-  .right-card {
-    padding: 18px 14px 22px;
-    border-radius: 24px;
-  }
+    .dashboard-right {
+        padding: 12px;
+    }
 
-  .right-title {
-    margin: 2px 0 12px;
-  }
+    .right-card {
+        padding: 18px 14px 22px;
+        border-radius: 24px;
+    }
 
-  .right-header {
-    align-items: flex-start;
-    flex-wrap: wrap;
-    margin-bottom: 12px;
-  }
+    .right-title {
+        margin: 2px 0 12px;
+    }
 
-  .right-title-actions {
-    width: 100%;
-    justify-content: flex-start;
-  }
+    .right-header {
+        align-items: flex-start;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+    }
 
-  .right-controls .form {
-    padding: 18px 14px;
-  }
+    .right-title-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
 
-  .selector-btn,
-  .selector-dropdown,
-  .checkbox-btn {
-    padding: 10px 14px;
-    font-size: 13px;
-  }
+    .right-controls .form {
+        padding: 18px 14px;
+    }
 
-  .group-hint {
-    font-size: 15px;
-  }
+    .selector-btn,
+    .selector-dropdown,
+    .checkbox-btn {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
 
-  .analyse-btn {
-    font-size: 16px;
-    padding: 14px 16px;
-  }
+    .group-hint {
+        font-size: 15px;
+    }
+
+    .analyse-btn {
+        font-size: 16px;
+        padding: 14px 16px;
+    }
+
+    /* Recipe card 在手機版改為上下排列 */
+    .recipe-card {
+        flex-direction: column;
+    }
+
+    .recipe-card-img-wrap {
+        flex: none;
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(46, 139, 87, 0.20);
+    }
+
+    .recipe-card-img-wrap .recipe-img {
+        height: 160px;
+        width: 100%;
+    }
+
+    .recipe-card-info {
+        flex: none;
+        width: 100%;
+        padding: 12px 14px 14px;
+    }
 }
