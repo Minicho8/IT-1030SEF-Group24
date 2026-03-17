@@ -6,10 +6,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- ===== View Recipe Button Styles ===== -->
+    <style>
+        .recipe-card {
+            position: relative; /* anchor for the absolute button */
+        }
+
+        .view-recipe-btn {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            padding: 5px 14px;
+            border-radius: 999px;
+            border: 1.5px solid var(--accent);
+            background: rgba(46, 139, 87, 0.10);
+            color: var(--accent);
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            z-index: 1;
+            transition: background 0.15s, color 0.15s, transform 0.15s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .view-recipe-btn:hover {
+            background: var(--accent);
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(46, 139, 87, 0.28);
+        }
+
+        /* Push card info content below the button */
+        .recipe-card-info {
+            padding-top: 30px;
+        }
+
+        /* Remove old inline link style */
+        .view-recipe-link {
+            display: none;
+        }
+
+        @media screen and (max-width: 850px) {
+            .view-recipe-btn {
+                top: 10px;
+                right: 10px;
+                font-size: 11px;
+                padding: 4px 11px;
+            }
+        }
+    </style>
+
     <script src="pluralize.js"></script>
     <script src="mood.js"></script>
     <script src="ingredients.js"></script>
     <script src="system.js" defer></script>
+
+    <!-- ===== Patch: inject View Recipe button into dynamic recipe cards ===== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Watch #analyseResults for newly injected recipe cards
+            const observer = new MutationObserver(() => {
+                document.querySelectorAll('.recipe-card').forEach(card => {
+                    // Skip if already patched
+                    if (card.querySelector('.view-recipe-btn')) return;
+
+                    // Find the existing anchor link (added by system.js)
+                    const link = card.querySelector('a[href]');
+                    if (!link) return;
+
+                    const url = link.href;
+
+                    // Build the button
+                    const btn = document.createElement('a');
+                    btn.href        = url;
+                    btn.target      = '_blank';
+                    btn.rel         = 'noopener noreferrer';
+                    btn.className   = 'view-recipe-btn';
+                    btn.innerHTML   = 'View Recipe &rarr;';
+
+                    // Prepend to card so it sits on top-right via position:absolute
+                    card.prepend(btn);
+
+                    // Hide the original inline link
+                    link.style.display = 'none';
+                });
+            });
+
+            observer.observe(
+                document.getElementById('analyseResults'),
+                { childList: true, subtree: true }
+            );
+        });
+    </script>
 </head>
 <body>
 

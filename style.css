@@ -672,16 +672,14 @@ dialog::backdrop {
     text-align: left;
 }
 
-/* ===== Recipe Card ===== */
+/* ===== Recipe Card Green Box ===== */
 
 .recipe-card {
-    position: relative;
     background: rgba(150, 236, 130, 0.20);
     border: 1.5px solid rgba(46, 139, 87, 0.40);
     border-radius: 14px;
-    overflow: hidden;
+    padding: 14px 16px;
     width: 100%;
-    max-height: 140px;
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
@@ -696,83 +694,164 @@ dialog::backdrop {
     transform: translateY(-2px);
 }
 
-/* ===== View Recipe Button — 同標題同一行 ===== */
-.view-recipe-btn {
-    /* 移除 position: absolute */
-    flex-shrink: 0;
-    background: rgba(46, 139, 87, 0.85);
-    color: #ffffff;
-    font-size: 11px;
-    font-weight: 600;
-    font-family: var(--font-sans);
-    padding: 4px 10px;
-    border: 2px;
-    border-radius: 20px;
-    text-decoration: none;
-    letter-spacing: 0.3px;
-    white-space: nowrap;
-    border: none;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.15s ease;
-    backdrop-filter: blur(4px);
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-}
-
-.view-recipe-btn:hover {
-    background: rgba(30, 100, 60, 0.95);
-    transform: scale(1.05);
-}
-
-.view-recipe-btn:active {
-    transform: scale(0.97);
-}
-
-/* ===== 標題行：Recipe Name + View Recipe 同一行 ===== */
-.recipe-card-header {
+/* 左側圖片區域 — 佔 50% */
+.recipe-card-img-wrap {
+    flex: 0 0 50%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 8px;
+    justify-content: center;
+    padding-right: 12px;
+    border-right: 1px solid rgba(46, 139, 87, 0.20);
+    box-sizing: border-box;
+}
+
+.recipe-card-img-wrap .recipe-img {
     width: 100%;
+    height: 130px;
+    border-radius: 10px;
+    object-fit: cover;
+    display: block;
+    margin-top: 0;
 }
 
-.recipe-card-header strong {
-    flex: 1;
-    min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--text-dark);
-}
-
-/* ===== 右側文字區域 — 移除頂部 padding ===== */
+/* 右側文字區域 — 佔 50% */
 .recipe-card-info {
-    flex: 0 0 65%;
+    flex: 0 0 50%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     gap: 5px;
-    padding: 10px 14px;        /* ✅ 移除 padding-top: 34px */
+    padding-left: 14px;
     box-sizing: border-box;
     min-width: 0;
-    overflow: hidden;
 }
 
-/* strong 只在 recipe-card-header 裡，所以移除舊的 recipe-card-info strong */
-.recipe-card-info span {
-    font-size: 11px;
-    color: var(--text-light);
+/* ===== Ingredient Chips inside Recipe Cards ===== */
+
+.ing-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+}
+.ing-chip {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    border: 1px solid;
+}
+.ing-chip-ok {
+    background: rgba(34, 197, 94, 0.12);
+    border-color: rgba(34, 197, 94, 0.45);
+    color: #166534;
+}
+.ing-chip-missing {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.45);
+    color: #991b1b;
+    text-decoration: line-through;
+    font-style: italic;
+}
+
+.analyse-again-btn {
+    width: auto;
+    max-width: none;
+    margin: 0;
+    border: 2px solid var(--accent);
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    background: #fff;
+    color: var(--accent);
+    box-shadow: 0 10px 24px rgba(28, 55, 45, 0.12);
+    font-family: var(--font-sans);
+    transition: background 0.15s, color 0.15s;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+}
+.analyse-again-btn:hover {
+    background: var(--accent);
+    color: #fff;
 }
 
-/* 手機版同樣移除頂部 padding */
+/* ===== Responsive ===== */
+
 @media screen and (max-width: 850px) {
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .dashboard-right {
+        padding: 12px;
+    }
+
+    .right-card {
+        padding: 18px 14px 22px;
+        border-radius: 24px;
+    }
+
+    .right-title {
+        margin: 2px 0 12px;
+    }
+
+    .right-header {
+        align-items: flex-start;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+    }
+
+    .right-title-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .right-controls .form {
+        padding: 18px 14px;
+    }
+
+    .selector-btn,
+    .selector-dropdown,
+    .checkbox-btn {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+
+    .group-hint {
+        font-size: 15px;
+    }
+
+    .analyse-btn {
+        font-size: 16px;
+        padding: 14px 16px;
+    }
+
+    /* Recipe card 在手機版改為上下排列 */
+    .recipe-card {
+        flex-direction: column;
+    }
+
+    .recipe-card-img-wrap {
+        flex: none;
+        width: 100%;
+        padding-right: 0;
+        padding-bottom: 12px;
+        border-right: none;
+        border-bottom: 1px solid rgba(46, 139, 87, 0.20);
+    }
+
+    .recipe-card-img-wrap .recipe-img {
+        height: 160px;
+    }
+
     .recipe-card-info {
-        padding: 10px 14px 14px;
+        flex: none;
+        width: 100%;
+        padding-left: 0;
+        padding-top: 12px;
     }
 }
 .recipe-img {
@@ -781,4 +860,49 @@ dialog::backdrop {
     border-radius: 12px;
     margin-top: 12px;
     object-fit: contain;
+}
+/* Make the card the anchor for absolute positioning */
+.recipe-card {
+    position: relative;   /* add this to existing rule */
+}
+
+/* ===== View Recipe Button (top-right of card) ===== */
+.view-recipe-btn {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    border: 1.5px solid var(--accent);
+    background: rgba(46, 139, 87, 0.10);
+    color: var(--accent);
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s, transform 0.15s;
+    z-index: 1;
+}
+
+.view-recipe-btn:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(46, 139, 87, 0.28);
+}
+
+/* Push recipe title away from the button */
+.recipe-card-info {
+    padding-top: 28px;  /* override existing value */
+}
+
+/* Mobile: keep button readable on stacked layout */
+@media screen and (max-width: 850px) {
+    .view-recipe-btn {
+        top: 10px;
+        right: 10px;
+        font-size: 11px;
+        padding: 4px 11px;
+    }
 }

@@ -414,7 +414,7 @@ function buildView(view) {
                         : ''}
                 </div>
 
-                <span>${r.source || 'Internet'} · ${r.cuisine || 'Unknown'} Cuisine · Difficulty: ${r.difficulty == '0' ? 'Easy' : r.difficulty === '1' ? 'Normal' : 'Hard'}</span>
+                <span>${r.source || 'Internet'} · ${r.cuisine || 'Unknown'} Cuisine <br> Difficulty: ${r.difficulty == '0' ? 'Easy' : r.difficulty === '1' ? 'Normal' : 'Hard'}</span>
 
                 <div class="ing-chips">
                     ${r.formatIngs.sort((a, b) => a.localeCompare(b)).map(ing => {
