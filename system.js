@@ -41,7 +41,16 @@ fetch(recipeCSV, { cache: 'no-cache' }).then(response => {
         const lines = text.trim().split('\n');
         const objects = lines.slice(1).map(line => {
             const row = parseCSVLine(line);
-            return {recipeName: row[0],timeSlot: row[1],source: row[2],ingredients: row[3],cuisine: row[4],difficulty: row[5],recipeUrl: row[6],recipeImg: row[7] || '',  };
+            return {
+                recipeName: row[0],
+                timeSlot: row[1],
+                source: row[2],
+                ingredients: row[3],
+                cuisine: row[4],
+                difficulty: row[5],
+                recipeUrl: row[6],
+                recipeImg: row[7] || '',
+            };
         });
 
         localStorage.removeItem(RECIPE_STORAGE_KEY);
@@ -60,14 +69,14 @@ fetch(recipeCSV, { cache: 'no-cache' }).then(response => {
 });
 
 function loadIngredientsFromStorage() {
-  try {
-    const raw = localStorage.getItem(IMG_STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
+    try {
+        const raw = localStorage.getItem(IMG_STORAGE_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        return [];
+    }
 }
 
 function saveIngredientsToStorage(list) {
@@ -121,33 +130,37 @@ function expiryTag(ingredient) {
     if (d <= 30) return { text: "≤ 1 month", status: "tag-y" };
     return { text: `${d} days`, status: "tag-g" };
 }
+
 //add ingredient function
 function addNewIngredient(data) {
-  const item = {
-    id: uid(),
-    name: data.name.trim()[0].toUpperCase() + data.name.trim().slice(1).toLowerCase(),
-    category: data.category,
-    qty: Number(data.qty),
-    unit: String("Servings"),
-    expiry: data.expiry || "",
-    minQty: Number(3)
-  };
-  ingredients = [item, ...ingredients];
-  saveIngredientsToStorage(ingredients);
-  buildView('left');
+    const item = {
+        id: uid(),
+        name: data.name.trim()[0].toUpperCase() + data.name.trim().slice(1).toLowerCase(),
+        category: data.category,
+        qty: Number(data.qty),
+        unit: String("Servings"),
+        expiry: data.expiry || "",
+        minQty: Number(3)
+    };
+    ingredients = [item, ...ingredients];
+    saveIngredientsToStorage(ingredients);
+    buildView('left');
 }
+
 //delete ingredient function
 function deleteExistingIngredient(id) {
     ingredients = ingredients.filter((x) => x.id !== id);
     saveIngredientsToStorage(ingredients);
     buildView('left');
 }
+
 //edit ingredient expiry function
 function updateIngredientExpiry(id, expiry) {
-        ingredients = ingredients.map((item) => item.id === id ? { ...item, expiry } : item);
-        saveIngredientsToStorage(ingredients);
-        buildView('left');
+    ingredients = ingredients.map((item) => item.id === id ? { ...item, expiry } : item);
+    saveIngredientsToStorage(ingredients);
+    buildView('left');
 }
+
 //update ingredient stock function (use)
 function updateIngredientStock(id, use) {
     ingredients = ingredients.map((x) => {
@@ -174,6 +187,7 @@ function closeSetExpiryModal() {
         document.getElementById('setExpiryModal').close();
     }
 }
+
 //filter function
 function filterIngredients(list, {category, expiry, search, lowStockOnly}) {
     const searchkey = (search || "").trim().toLowerCase();
@@ -193,29 +207,31 @@ function filterIngredients(list, {category, expiry, search, lowStockOnly}) {
         return true;
     });
 }
+
 //sort function
-function sortIngredients(list,sortBy) {
+function sortIngredients(list, sortBy) {
     const temp = [...list];
     switch (sortBy) {
-    case "nameAsc":
-        temp.sort((a, b) => a.name.localeCompare(b.name));
-        break;
-    case "nameDesc":
-        temp.sort((a, b) => b.name.localeCompare(a.name));
-        break;
-    case "expiryDesc":
-        temp.sort((a, b) => (daysleft(b.expiry)) - (daysleft(a.expiry)));
-        break;
-    case "stockLowFirst":
-        temp.sort((a, b) => a.qty - b.qty);
-        break;
-    case "expiryAsc":
-    default:
-        temp.sort((a, b) => (daysleft(a.expiry)) - (daysleft(b.expiry)));
-        break;
+        case "nameAsc":
+            temp.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+        case "nameDesc":
+            temp.sort((a, b) => b.name.localeCompare(a.name));
+            break;
+        case "expiryDesc":
+            temp.sort((a, b) => (daysleft(b.expiry)) - (daysleft(a.expiry)));
+            break;
+        case "stockLowFirst":
+            temp.sort((a, b) => a.qty - b.qty);
+            break;
+        case "expiryAsc":
+        default:
+            temp.sort((a, b) => (daysleft(a.expiry)) - (daysleft(b.expiry)));
+            break;
     }
-  return temp;
+    return temp;
 }
+
 //update left view with filters and sorting applied
 function updateIngredientsView() {
     const filtered = filterIngredients(ingredients, {
@@ -235,13 +251,13 @@ function checkResetBtn() {
         document.getElementById('sortBy').value !== FILTER_DEFAULTS.sortBy ||
         document.getElementById('lowStockOnly').checked !== FILTER_DEFAULTS.lowStockOnly ||
         document.getElementById('ingredientSearch').value !== FILTER_DEFAULTS.ingredientSearch;
-        document.getElementById('resetFiltersBtn').hidden = !changed;
+    document.getElementById('resetFiltersBtn').hidden = !changed;
 }
+
 // ===== RIGHT PANEL: Meal & Difficulty Selector + Analyse =====
 function scrollRightPanelToTop() {
     const rightControls = document.querySelector('.right-controls');
     if (!rightControls) return;
-
     rightControls.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -261,6 +277,7 @@ function suggestRecipes() {
         const raw = localStorage.getItem('recipeApp.recipes');
         recipes = raw ? JSON.parse(raw) : [];
     } catch (e) { recipes = []; }
+
     const analyseIngs = [...ingredients];
     const matchingIngs = analyseIngs.map(i => i.name.toLowerCase());
 
@@ -273,6 +290,7 @@ function suggestRecipes() {
     const expiryFirst = document.getElementById('expiryFirst').checked;
     const moodSuggest = document.getElementById('moodSuggest').checked;
     let moodIngredientSet = new Set();
+
     if (moodSuggest) {
         if (!currentMood) {
             alert('Please select your mood first.');
@@ -305,13 +323,12 @@ function suggestRecipes() {
         const moodList = [...moodIngredientSet];
         const moodMatchedList = moodList.filter(ri => formatIngs.some(p => ri.includes(p)));
         const moodMatched = (moodMatchedList.length > 0);
-        // Urgency: minimum days-left among matched ingredients (lower = more urgent)
         const urgencyScore = matched.length > 0
-        ? Math.min(...matched.map(ri => {
-            const key = Object.keys(expiryMap).find(p => ri.includes(p));
-            return key !== undefined ? expiryMap[key] : Infinity;
+            ? Math.min(...matched.map(ri => {
+                const key = Object.keys(expiryMap).find(p => ri.includes(p));
+                return key !== undefined ? expiryMap[key] : Infinity;
             }))
-        : Infinity;
+            : Infinity;
         return { ...r, matched, formatIngs, matchRatio, urgencyScore, moodMatched };
     });
 
@@ -331,7 +348,7 @@ function suggestRecipes() {
 
 function buildView(view) {
     switch (view) {
-        case 'left':
+        case 'left': {
             checkResetBtn();
             const viewdata = updateIngredientsView();
             let viewlist = "";
@@ -346,7 +363,6 @@ function buildView(view) {
                                 <span class="ingredient-name" title="${item.name}">${item.name}</span>
                                 <span class="tag ${tag.status}">${tag.text}</span>
                                 ${lowStock ? `<span class="tag tag-y">Low stock</span>` : ``}
-                                
                             </div>
                             <div class="ingredient-actions">
                                 <button class="red-btn" data-action="delete" type="button">Delete</button>
@@ -356,56 +372,63 @@ function buildView(view) {
                             ${item.category} · <strong>${item.qty}</strong> ${item.unit}
                             ${item.expiry ? `· expires ${item.expiry}` : ``}
                         </div>
-
                         <div class="stock-controls">
                             <label class="stock-label">Adjust</label>
                             <button class="stock-btn" data-action="useAmount" type="button">Use</button>
-                            <!-- <button class="stock-btn" data-action="addAmount" type="button">Add</button> -->
-                            
                             <input class="stock-input" id="adj-${item.id}" data-role="adjustAmount" type="number" min="0" step="1" value="1" inputmode="decimal">
                             <span class="stock-unit">${item.unit}</span>
                             <button class="red-btn" data-action="setExpiry" type="button"><i class='fa fa-pencil'></i> Expires</button>
                         </div>
-                    </div> 
+                    </div>
                 </li>`;
             }
             document.getElementById("ingredientsList").innerHTML = viewlist;
             document.getElementById("countTotal").textContent = String(ingredients.length);
             document.getElementById("countExpiring").textContent = String(ingredients.filter(i => i.expiry && daysleft(i.expiry) <= 7).length);
             break;
-            
-        case 'right':
-            const results = suggestRecipes();
-            let html = `<p class="results-heading">Showing top ${Math.min(10, results.length)} suggested recipe(s) of ${results.length} found  recipe(s)</p>`;
-            if (results.length === 0) {
-                html += `<p class="no-results">No recipes found for the selected filters.</p>`;
-            }
-            for (const r of results.slice(0, 10)) {
-                const pct = Math.round(r.matchRatio * 100);
-                html += `
-                <div class="recipe-card">
-                    ${r.recipeImg
-                    ? `<img src="${r.recipeImg}" class="recipe-img" onerror="this.style.display='none'">`
-                    : ''}
-                    <div class="recipe-info">
-                    <div class="recipe-title">${r.recipeName || 'Unknown'}</div>
-                    <div class="recipe-meta">
-                        ${r.source || 'Internet'} · ${r.cuisine || 'Unknown'} Cuisine · Difficulty: ${r.difficulty == '0' ? 'Easy' : r.difficulty === '1' ? 'Normal' : 'Hard'}
-                    </div>
-                    <div class="ing-chips">
-                        ${r.formatIngs.sort((a,b) => a.localeCompare(b)).map(ing => {
+        }
+
+        case 'right': {
+    const results = suggestRecipes();
+    let html = `<p class="results-heading">Showing top ${Math.min(10, results.length)} suggested recipe(s) of ${results.length} found recipe(s)</p>`;
+    if (results.length === 0) {
+        html += `<p class="no-results">No recipes found for the selected filters.</p>`;
+    }
+    for (const r of results.slice(0, 10)) {
+        html += `
+        <div class="recipe-card">
+
+            ${r.recipeImg
+                ? `<div class="recipe-card-img-wrap">
+                       <img src="${r.recipeImg}" class="recipe-img" onerror="this.parentElement.style.display='none'">
+                   </div>`
+                : ''}
+
+            <div class="recipe-card-info">
+
+                <!-- ✅ 標題 + View Recipe 同一行 -->
+                <div class="recipe-card-header">
+                    <strong>${r.recipeName || 'Unknown'}</strong>
+                    ${r.recipeUrl
+                        ? `<a href="${r.recipeUrl}" target="_blank" class="view-recipe-btn">View Recipe →</a>`
+                        : ''}
+                </div>
+
+                <span>${r.source || 'Internet'} · ${r.cuisine || 'Unknown'} Cuisine · Difficulty: ${r.difficulty == '0' ? 'Easy' : r.difficulty === '1' ? 'Normal' : 'Hard'}</span>
+
+                <div class="ing-chips">
+                    ${r.formatIngs.sort((a, b) => a.localeCompare(b)).map(ing => {
                         const isMatched = r.matched.includes(ing);
                         return `<span class="ing-chip ${isMatched ? 'ing-chip-ok' : 'ing-chip-missing'}">${ing}</span>`;
-                        }).join('')}
-                    </div>
-                    ${r.recipeUrl
-                        ? `<a href="${r.recipeUrl}" target="_blank" class="recipe-link">View Recipe →</a>`
-                        : ''}
-                    </div>
-                </div>`;
-            }
-            document.getElementById('analyseResults').innerHTML = html;
-            break;
+                    }).join('')}
+                </div>
+
+            </div>
+        </div>`;
+    }
+    document.getElementById('analyseResults').innerHTML = html;
+    break;
+}
     }
 }
 
@@ -414,6 +437,7 @@ function model(name) {
     this.open = (item) => openModal(this.name, item);
     this.close = () => closeModal(this.name);
 }
+
 function openModal(action, item) {
     switch (action) {
         case "add":
@@ -438,12 +462,13 @@ function openModal(action, item) {
             break;
     }
 }
+
 function closeModal(action) {
     switch (action) {
         case "add":
             if (document.getElementById("ingredientModal").open) {
                 document.getElementById("ingredientModal").close();
-            };
+            }
             break;
         case "mood":
             document.getElementById('moodModal').close();
@@ -453,7 +478,7 @@ function closeModal(action) {
                 document.getElementById('setExpiryModal').close();
             }
             break;
-    }  
+    }
 }
 
 // Initialize Models
@@ -462,17 +487,18 @@ const moodModal = new model("mood");
 const setExpiryModal = new model("setExpiry");
 
 // LEFT PANEL Initial and AddEventListener
-document.getElementById('search-btn').addEventListener('click', function() {
+document.getElementById('search-btn').addEventListener('click', function () {
     document.getElementsByClassName('search')[0].classList.toggle('show');
     if (document.getElementsByClassName('search')[0].classList.contains('show')) {
         document.getElementById('ingredientSearch').focus();
     }
 });
-document.getElementById('filter-btn').addEventListener('click', function() {
+
+document.getElementById('filter-btn').addEventListener('click', function () {
     document.getElementsByClassName('filter')[0].classList.toggle('show');
 });
 
-document.getElementById('ingredientsList').addEventListener('click', function(event) {
+document.getElementById('ingredientsList').addEventListener('click', function (event) {
     const element = event.target.closest('[data-action]');
     if (!element) return;
 
@@ -487,14 +513,14 @@ document.getElementById('ingredientsList').addEventListener('click', function(ev
             break;
         }
         case "setExpiry": {
-            const item = ingredients.find((x) => x.id === id);
-            if (!item) return
-            setExpiryModal.open(item);
+            const ingredient = ingredients.find((x) => x.id === id);
+            if (!ingredient) return;
+            setExpiryModal.open(ingredient);
             break;
         }
         case "useAmount": {
             const amount = item.querySelector('input[data-role="adjustAmount"]').value;
-            updateIngredientStock(id,amount);
+            updateIngredientStock(id, amount);
             break;
         }
     }
@@ -513,7 +539,6 @@ document.getElementById('btnCancelSetExpiry').addEventListener('click', setExpir
 document.getElementById('btnClearSetExpiry').addEventListener('click', function () {
     const id = document.getElementById('setExpiryIngredientId').value;
     if (!id) return;
-
     updateIngredientExpiry(id, '');
     setExpiryModal.close();
 });
@@ -522,30 +547,27 @@ document.getElementById('setExpiryForm').addEventListener('submit', function (e)
     e.preventDefault();
     const id = document.getElementById('setExpiryIngredientId').value;
     if (!id) return;
-
     const nextExpiry = document.getElementById('setExpiryDate').value || '';
     updateIngredientExpiry(id, nextExpiry);
     setExpiryModal.close();
 });
 
-document.getElementById("ingredientForm").addEventListener("submit", function(s) {
+document.getElementById("ingredientForm").addEventListener("submit", function (s) {
     s.preventDefault();
-
     addNewIngredient({
         name: document.getElementById("ingName").value,
         category: document.getElementById("ingCategory").value,
         qty: document.getElementById("ingQty").value,
         expiry: document.getElementById("ingExpiry").value,
     });
-
     addIngredientModal.close();
 });
 
 document.getElementById('resetFiltersBtn').addEventListener('click', function () {
-    document.getElementById('filterCategory').value  = FILTER_DEFAULTS.filterCategory;
-    document.getElementById('filterExpiry').value    = FILTER_DEFAULTS.filterExpiry;
-    document.getElementById('sortBy').value          = FILTER_DEFAULTS.sortBy;
-    document.getElementById('lowStockOnly').checked  = FILTER_DEFAULTS.lowStockOnly;
+    document.getElementById('filterCategory').value = FILTER_DEFAULTS.filterCategory;
+    document.getElementById('filterExpiry').value = FILTER_DEFAULTS.filterExpiry;
+    document.getElementById('sortBy').value = FILTER_DEFAULTS.sortBy;
+    document.getElementById('lowStockOnly').checked = FILTER_DEFAULTS.lowStockOnly;
     document.getElementById('ingredientSearch').value = FILTER_DEFAULTS.ingredientSearch;
     document.getElementsByClassName('search')[0].classList.remove('show');
     buildView('left');
@@ -553,8 +575,7 @@ document.getElementById('resetFiltersBtn').addEventListener('click', function ()
 
 buildView('left');
 
-// MOOD CHECK 
-
+// MOOD CHECK
 const MOOD_DATE_KEY = 'food_wise_date';
 const MOOD_VAL_KEY  = 'food_wise_mood';
 const today = new Date().toLocaleDateString('en-GB');
@@ -569,28 +590,25 @@ document.getElementById('moodForm').addEventListener('submit', function (e) {
 });
 
 const lastDate = localStorage.getItem(MOOD_DATE_KEY);
-if (lastDate !== today && localStorage.getItem(MOOD_VAL_KEY)) window.location.replace('/'); // Force mood reset on new day
-if (!localStorage.getItem(MOOD_VAL_KEY)) {moodModal.open();};
+if (lastDate !== today && localStorage.getItem(MOOD_VAL_KEY)) window.location.replace('/');
+if (!localStorage.getItem(MOOD_VAL_KEY)) { moodModal.open(); }
 document.getElementById('changeMoodBtn').addEventListener('click', moodModal.open);
 
 // RIGHT PANEL Initial and AddEventListener
-
 document.getElementById('difficultyGroup').addEventListener('click', function (e) {
-  const btn = e.target.closest('.selector-btn');
-  if (!btn) return;
-  btn.classList.toggle('active');
+    const btn = e.target.closest('.selector-btn');
+    if (!btn) return;
+    btn.classList.toggle('active');
 });
 
 document.getElementById('analyseBtn').addEventListener('click', function () {
     buildView('right');
-    // Switch right panel to results view
     const mealLabel = document.getElementById('mealGroup').options[document.getElementById('mealGroup').selectedIndex].text;
     document.querySelector('.right-title').textContent = 'Recipe — ' + mealLabel;
     document.querySelector('.right-controls .form').style.display = 'none';
     const titleActions = document.getElementById('rightTitleActions');
     titleActions.innerHTML = '';
 
-    // Add Analyse Again button
     const againBtn = document.createElement('button');
     againBtn.id = 'analyseAgainBtn';
     againBtn.type = 'button';
