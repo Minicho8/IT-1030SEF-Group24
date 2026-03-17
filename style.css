@@ -366,6 +366,7 @@ dialog::backdrop {
     gap: 8px;
 }
 .mood-label span:hover {
+  transform: scale(1.05);
     background: #d8f3e5;
     border-color: var(--accent-soft);
 }
@@ -384,6 +385,7 @@ dialog::backdrop {
     background: #cde8d8;
     cursor: pointer;
 }
+
 
 /* ===== Ingredient Modal ===== */
 
