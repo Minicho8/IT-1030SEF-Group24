@@ -174,20 +174,6 @@ function updateIngredientStock(id, use) {
     saveIngredientsToStorage(ingredients);
     buildView('left');
 }
-
-function openSetExpiryModal(item) {
-    document.getElementById('setExpiryIngredientId').value = item.id;
-    document.getElementById('setExpiryDate').value = item.expiry || '';
-    document.getElementById('setExpiryTarget').textContent = `Ingredient: ${item.name}`;
-    document.getElementById('setExpiryModal').showModal();
-}
-
-function closeSetExpiryModal() {
-    if (document.getElementById('setExpiryModal').open) {
-        document.getElementById('setExpiryModal').close();
-    }
-}
-
 //filter function
 function filterIngredients(list, {category, expiry, search, lowStockOnly}) {
     const searchkey = (search || "").trim().toLowerCase();
