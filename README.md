@@ -1,4 +1,4 @@
-# IT-1030SEF Group 24 - Recipe & Mood Web Application
+# IT-1030SEF Group 24 - Food Wise Kitchen System
 
 ## Overview
 This is a web application designed to help users discover and filter recipes based on their current mood and the ingredients they have available. 
