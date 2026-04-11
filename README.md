@@ -19,7 +19,10 @@ This is a web application designed to help users discover and filter recipes bas
 ## File Structure
 - index.html / home.html: Main entry points of the application.
 - style.css: Stylesheet for the UI.
-- system.js / mood.js / pluralize.js: Core logic for the web application and mood functionality.
+- system.js / mood.js : Core logic for the web application and mood functionality.
 - ingredients.js: Contains the initial default ingredients.
-- ecipesv1.csv - ecipesv4.csv: Data source files containing recipe details.
-- docs_not_in_use/: Contains previous iterations and testing modules.
+- recipes.csv: Data source files containing recipe details.
+- *pluralize.js: Third-party javascript for pluralizing and singularizing English words.
+
+## Dependencies *
+- [pluralize](https://github.com/plurals/pluralize): A robust pluralization library for Node.js and browsers.
