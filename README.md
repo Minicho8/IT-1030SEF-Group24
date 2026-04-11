@@ -14,7 +14,7 @@ This is a web application designed to help users discover and filter recipes bas
 
 ## Customization & Troubleshooting
 - **Default Ingredients:** The application automatically loads a set of default ingredients upon first launch using the ingredients.js file.
-> [!NOTE] **Removing Default Ingredients:** If you want to start with a blank list of ingredients, you can do so by deleting the ingredients.js file and clearing your browser's local storage. By doing this, the default ingredients will not load when you first open the website.
+>[!NOTE] **Removing Default Ingredients:** If you want to start with a blank list of ingredients, you can do so by deleting the ingredients.js file and clearing your browser's local storage. By doing this, the default ingredients will not load when you first open the website.
 
 ## File Structure
 - index.html / home.html: Main entry points of the application.
