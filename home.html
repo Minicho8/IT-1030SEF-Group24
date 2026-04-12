@@ -1,30 +1,142 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>My Web Page</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <title>Food Wise System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- ===== View Recipe Button Styles ===== -->
+    <style>
+        .recipe-card {
+            position: relative; /* anchor for the absolute button */
+        }
+
+        .view-recipe-btn {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            padding: 5px 14px;
+            border-radius: 999px;
+            border: 1.5px solid var(--accent);
+            background: rgba(46, 139, 87, 0.10);
+            color: var(--accent);
+            font-family: var(--font-sans);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            z-index: 1;
+            transition: background 0.15s, color 0.15s, transform 0.15s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .view-recipe-btn:hover {
+            background: var(--accent);
+            color: #fff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(46, 139, 87, 0.28);
+        }
+
+        /* Push card info content below the button */
+        .recipe-card-info {
+            padding-top: 30px;
+        }
+
+        /* Remove old inline link style */
+        .view-recipe-link {
+            display: none;
+        }
+
+        @media screen and (max-width: 850px) {
+            .view-recipe-btn {
+                top: 10px;
+                right: 10px;
+                font-size: 11px;
+                padding: 4px 11px;
+            }
+        }
+    </style>
+
     <script src="pluralize.js"></script>
     <script src="mood.js"></script>
     <script src="ingredients.js"></script>
     <script src="system.js" defer></script>
+
+    <!-- ===== Patch: inject View Recipe button into dynamic recipe cards ===== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Watch #analyseResults for newly injected recipe cards
+            const observer = new MutationObserver(() => {
+                document.querySelectorAll('.recipe-card').forEach(card => {
+                    // Skip if already patched
+                    if (card.querySelector('.view-recipe-btn')) return;
+
+                    // Find the existing anchor link (added by system.js)
+                    const link = card.querySelector('a[href]');
+                    if (!link) return;
+
+                    const url = link.href;
+
+                    // Build the button
+                    const btn = document.createElement('a');
+                    btn.href        = url;
+                    btn.target      = '_blank';
+                    btn.rel         = 'noopener noreferrer';
+                    btn.className   = 'view-recipe-btn';
+                    btn.innerHTML   = 'View Recipe &rarr;';
+
+                    // Prepend to card so it sits on top-right via position:absolute
+                    card.prepend(btn);
+
+                    // Hide the original inline link
+                    link.style.display = 'none';
+                });
+            });
+
+            observer.observe(
+                document.getElementById('analyseResults'),
+                { childList: true, subtree: true }
+            );
+        });
+    </script>
 </head>
 <body>
+
     <header>
         <h1>Food Wise System</h1>
-        <button id="changeMoodBtn" class="change-mood-btn"><i class="fa fa-smile-o"></i> Change Mood</button>
+        <button id="changeMoodBtn" class="change-mood-btn">
+            <i class="fa fa-smile-o"></i> Change Mood
+        </button>
     </header>
+
     <main class="dashboard-page">
         <section class="dashboard">
+
+            <!-- ===== Left: Ingredients Panel ===== -->
             <div class="dashboard-left">
                 <div class="left-card card">
-                    <h3>Ingrediants</h3>
+
+                    <h3>Ingredients</h3>
+
                     <div class="top-left-btn">
-                        <button id="add-btn"><i class="fa fa-plus"></i></button>
-                        <button id="search-btn"><i class="fa fa-search"></i></button>
-                        <button id="filter-btn"><i class="fa fa-filter"></i></button>   
+                        <button id="add-btn" title="Add ingredient">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                        <button id="search-btn" title="Search">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        <button id="filter-btn" title="Filter">
+                            <i class="fa fa-filter"></i>
+                        </button>
                     </div>
+
                     <div class="controls">
+
                         <div class="filter">
                             <select id="filterCategory">
                                 <option value="all">All categories</option>
@@ -35,6 +147,7 @@
                                 <option value="Dairy">Dairy</option>
                                 <option value="Others">Others</option>
                             </select>
+
                             <select id="filterExpiry">
                                 <option value="all">All Due Dates</option>
                                 <option value="expired">Expired</option>
@@ -42,6 +155,7 @@
                                 <option value="month">≤ 1 month</option>
                                 <option value="halfYear">≤ 6 months</option>
                             </select>
+
                             <select id="sortBy">
                                 <option value="expiryAsc">Expiry ↑</option>
                                 <option value="expiryDesc">Expiry ↓</option>
@@ -49,58 +163,76 @@
                                 <option value="nameDesc">Name Z→A</option>
                                 <option value="stockLowFirst">Stock low first</option>
                             </select>
-                            <label><input type="checkbox" id="lowStockOnly" /> Low stock only</label>
+
+                            <label>
+                                <input type="checkbox" id="lowStockOnly" />
+                                Low stock only
+                            </label>
                         </div>
+
                         <div class="search">
                             <div class="search-bar">
                                 <i class="fa fa-search"></i>
                                 <input id="ingredientSearch" placeholder="Search ingredients" />
-                                <i class="fa fa-remove" onclick="clearSearch('ingredientSearch')"></i>
+                                <i class="fa fa-remove" onclick="clearSearch('ingredientSearch')" style="cursor:pointer;"></i>
                             </div>
                         </div>
-                        
+
                     </div>
+
                     <div class="summary">
                         Total: <span id="countTotal">0</span>
-                        · Expiring soon: <span id="countExpiring">0</span> Ingredients
+                        &nbsp;·&nbsp; Expiring soon: <span id="countExpiring">0</span> Ingredients
                         <button id="resetFiltersBtn" class="reset-filters-btn" hidden>
                             <i class="fa fa-times"></i> Reset filters
                         </button>
                     </div>
+
                     <div class="list-container">
                         <ul id="ingredientsList" class="ingredientsList" aria-live="polite"></ul>
                     </div>
+
                 </div>
             </div>
+
+            <!-- ===== Right: Recipe Panel ===== -->
             <div class="dashboard-right">
                 <div class="right-card card">
+
                     <div class="right-header">
                         <h2 class="right-title">Recipe</h2>
                         <div id="rightTitleActions" class="right-title-actions"></div>
                     </div>
-                    <div class="right-controls">
-                        <div class="form">
-                            <div class="group-block">
-                                <div class="group-hint">Meal Time<span class="req">*</span></div>
 
+                    <div class="right-controls">
+
+                        <div class="form">
+
+                            <!-- Meal Time -->
+                            <div class="group-block">
+                                <div class="group-hint">
+                                    Meal Time<span class="req">*</span>
+                                </div>
                                 <select id="mealGroup" class="selector-dropdown">
                                     <option value="0">Breakfast</option>
                                     <option value="1">Lunch</option>
-                                    <option value="1">Dinner</option>
+                                    <option value="2">Dinner</option>
                                 </select>
                             </div>
 
+                            <!-- Difficulty -->
                             <div class="group-block">
-                                <span class="group-hint">Recipe Difficulty (Select at least 1)<span class="req">*</span></span>
-
+                                <span class="group-hint">
+                                    Recipe Difficulty (Select at least 1)<span class="req">*</span>
+                                </span>
                                 <div id="difficultyGroup" class="selector-stack">
                                     <button type="button" class="selector-btn" data-value="0">Easy</button>
                                     <button type="button" class="selector-btn" data-value="1">Normal</button>
                                     <button type="button" class="selector-btn" data-value="2">Hard</button>
                                 </div>
                             </div>
-                            
 
+                            <!-- Options -->
                             <label class="checkbox-btn">
                                 <input type="checkbox" id="expiryFirst" />
                                 <span>🕐 Prioritise expiring ingredients first</span>
@@ -108,22 +240,30 @@
 
                             <label class="checkbox-btn">
                                 <input type="checkbox" id="moodSuggest" />
-                                <span>Suggest recipes by current mood</span>
+                                <span>😊 Suggest recipes by current mood</span>
                             </label>
 
+                            <!-- Analyse Button -->
                             <button id="analyseBtn" type="button" class="analyse-btn">
                                 Start Analyse Your Kitchen Stock
                             </button>
 
                             <p class="analyse-help">
-                                Please Update your Kitchen Stock in the Ingridients Panel before continue
+                                Please update your Kitchen Stock in the Ingredients panel before continuing.
                             </p>
+
                         </div>
-                        <div id="analyseResults" class="analyse-results"></div>    
+
+                        <!-- Results injected here by system.js -->
+                        <div id="analyseResults" class="analyse-results"></div>
+
                     </div>
                 </div>
             </div>
+
         </section>
+
+        <!-- ===== Mood Modal ===== -->
         <dialog id="moodModal">
             <form id="moodForm">
                 <h2 id="moodQuestion">How are you feeling right now?</h2>
@@ -174,6 +314,8 @@
                 </div>
             </form>
         </dialog>
+
+        <!-- ===== Set Expiry Modal ===== -->
         <dialog id="setExpiryModal">
             <h2>Update expiry date</h2>
             <p id="setExpiryTarget" class="expiry-target"></p>
@@ -190,38 +332,41 @@
                 </div>
             </form>
         </dialog>
+
+        <!-- ===== Add / Edit Ingredient Modal ===== -->
         <dialog id="ingredientModal">
-            <h2 id="ingredientModalTitle">Add ingredient</h2>
+            <h2 id="ingredientModalTitle">Add Ingredient</h2>
             <form id="ingredientForm">
-            <div>
-                <label for="ingName">Name</label>
-                <input id="ingName" name="name" required />
-            </div>
-            <div>
-                <label for="ingCategory">Category</label>
-                <select id="ingCategory" name="category">
-                    <option value="Fruit">Fruit</option>
-                    <option value="Vegetables">Vegetables</option>
-                    <option value="Grains">Grains</option>
-                    <option value="Protein">Protein</option>
-                    <option value="Dairy">Dairy</option>
-                    <option value="Others">Others</option>
-                </select>
-            </div>
-            <div>
-                <label for="ingQty">Quantity - Servings</label>
-                <input id="ingQty" name="qty" type="number" step="1" value="1" required />
-            </div>
-            <div>
-                <label for="ingExpiry">Expiry (YYYY-MM-DD)</label>
-                <input id="ingExpiry" name="expiry" type="date" />
-            </div>
-            <div class="modalActions">
-                <button type="submit">Save</button>
-                <button id="btnCancelModal" type="button">Cancel</button>
-            </div>
+                <div>
+                    <label for="ingName">Name</label>
+                    <input id="ingName" name="name" required />
+                </div>
+                <div>
+                    <label for="ingCategory">Category</label>
+                    <select id="ingCategory" name="category">
+                        <option value="Fruit">Fruit</option>
+                        <option value="Vegetables">Vegetables</option>
+                        <option value="Grains">Grains</option>
+                        <option value="Protein">Protein</option>
+                        <option value="Dairy">Dairy</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="ingQty">Quantity – Servings</label>
+                    <input id="ingQty" name="qty" type="number" step="1" min="0" value="1" required />
+                </div>
+                <div>
+                    <label for="ingExpiry">Expiry date</label>
+                    <input id="ingExpiry" name="expiry" type="date" />
+                </div>
+                <div class="modalActions">
+                    <button type="submit">Save</button>
+                    <button id="btnCancelModal" type="button">Cancel</button>
+                </div>
             </form>
         </dialog>
+
     </main>
 </body>
 </html>
