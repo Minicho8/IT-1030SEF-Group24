@@ -1,4 +1,4 @@
-# IT-1030SEF Group 24 - Recipe & Mood Web Application
+# IT-1030SEF Group 24 - Food Wise Kitchen System
 
 ## Overview
 This is a web application designed to help users discover and filter recipes based on their current mood and the ingredients they have available. 
@@ -47,6 +47,13 @@ Because this application is built with standard web technologies (HTML, CSS, Jav
 3. The app will launch automatically in your browser (usually at `http://127.0.0.1:5500/index.html`).
 
 
+<<<<<<< HEAD
+=======
+## Customization & Troubleshooting
+- **Default Ingredients:** The application automatically loads a set of default ingredients upon first launch using the ingredients.js file.
+>[!NOTE]
+>**Removing Default Ingredients:** If you want to start with a blank list of ingredients, you can do so by deleting the ingredients.js file and clearing your browser's local storage. By doing this, the default ingredients will not load when you first open the website.
+>>>>>>> 94669440ee8e0ee9468db97957e8760664c36b4e
 
 ## File Structure
 - index.html / home.html: Main entry points of the application.
