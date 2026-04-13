@@ -21,6 +21,8 @@ This is a web application designed to help users discover and filter recipes bas
    ```bash
    git clone https://github.com/Minicho8/IT-1030SEF-Group24
    ```
+   If git not found is shown, please download the git from [git-scm.com](https://git-scm.com/downloads) before clone repository
+   
    *(Alternatively, you can download the source code as a ZIP file and extract it.)*
 
 2. **Navigate to the project folder:**
