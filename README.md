@@ -12,6 +12,7 @@ This is a web application designed to help users discover and filter recipes bas
 
 ### Prerequisites
 - A modern web browser (Google Chrome, Mozilla Firefox, Microsoft Edge, Safari, etc.).
+- **Git:** If you do not have Git installed on your computer, you can download and install it from [git-scm.com](https://git-scm.com/downloads).
 - *(Optional)* A local development server like [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) for Visual Studio Code.
 
 ### Installation Steps
@@ -35,16 +36,20 @@ This is a web application designed to help users discover and filter recipes bas
 
 ### Running the Application
 
-Because this application is built with standard web technologies (HTML, CSS, JavaScript), you don't need any complex build tools to run it. Here are two ways to start the app:
+Because this application relies on fetching data from a CSV file (`recipes.csv`), standard browser security policies (CORS) prevent it from working correctly if you just double-click the `index.html` file. You **must** run it through a local web server.
 
-**Method 1: Direct File Opening (Quickest)**
-1. Locate the cloned or downloaded folder on your computer.
-2. Double-click the `index.html` file. It will automatically open in your default web browser.
+**Method 1: Using a Local Web Server in Visual Studio Code (Recommended)**
+1. Open the project folder in Visual Studio Code.
+2. If you don't have it, install the ["Live Server" extension](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer).
+3. Click the **"Go Live"** button in the bottom right corner of VS Code.
+4. The app will launch automatically in your browser (usually at `http://127.0.0.1:5500/index.html`).
 
-**Method 2: Using a Local Web Server in VScode (Recommended)**
-1. Open the project in Visual Studio Code.
-2. If you have the "Live Server" extension installed, click **"Go Live"** in the bottom right corner.
-3. The app will launch automatically in your browser (usually at `http://127.0.0.1:5500/index.html`).
+
+**Method 2: Using Python's Built-in Server**
+If you have Python installed on your computer, you can easily start a server from the command line:
+1. Open your terminal and navigate to the project folder: `cd IT-1030SEF-Group24`
+2. Run the command: `python -m http.server` (or `python3 -m http.server`)
+3. Open your browser and go to: `http://localhost:8000/index.html`
 
 ## File Structure
 - index.html / home.html: Main entry points of the application.
