@@ -18,7 +18,7 @@ This is a web application designed to help users discover and filter recipes bas
 
 1. **Clone the repository to your local machine:**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Minicho8/IT-1030SEF-Group24
    ```
    *(Alternatively, you can download the source code as a ZIP file and extract it.)*
 
